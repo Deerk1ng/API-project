@@ -1,0 +1,5 @@
+Generate User table model
+npx sequelize model:generate --name User --attributes username:string,email:string,hashedPassword:string
+
+generate demo seed file
+npx sequelize seed:generate --name demo-user
