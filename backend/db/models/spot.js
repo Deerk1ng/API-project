@@ -14,18 +14,78 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Spot.init({
-    userId: DataTypes.INTEGER,
-    address: DataTypes.STRING,
-    city: DataTypes.STRING,
-    state: DataTypes.STRING,
-    country: DataTypes.STRING,
-    lat: DataTypes.FLOAT,
-    lng: DataTypes.FLOAT,
-    name: DataTypes.STRING,
-    description: DataTypes.TEXT,
-    price: DataTypes.FLOAT,
-    previewImage: DataTypes.INTEGER,
-    avgRating: DataTypes.INTEGER
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    address: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isAlphanumeric: true
+      }
+    },
+    city: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isAlpha: true
+      }
+    },
+    state: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isAlpha: true
+      }
+    },
+    country: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isAlpha: true
+      }
+    },
+    lat: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+      validate: {
+        min: -90,
+        max: 90
+      }
+    },
+    lng: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+      validate: {
+        min: -180,
+        max: 180
+      }
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        len: [4, 50]
+      }
+    },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
+    price: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+      validate: {
+        min: 1
+      }
+    },
+    previewImage: {
+      type: DataTypes.INTEGER
+    },
+    avgRating: {
+      type: DataTypes.INTEGER
+    }
   }, {
     sequelize,
     modelName: 'Spot',

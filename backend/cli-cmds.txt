@@ -17,4 +17,4 @@ npx sequelize model:generate --name Image --attributes url:string,preview:boolea
 
 
 CREATE REVIEWS TABLE
-npx sequelize model:generate --name Review --attributes userId:integer,spotId:integer,review:text,stars:int
+npx sequelize model:generate --name Review --attributes userId:integer,spotId:integer,review:text,stars:integer
