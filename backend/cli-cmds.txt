@@ -3,3 +3,18 @@ npx sequelize model:generate --name User --attributes username:string,email:stri
 
 generate demo seed file
 npx sequelize seed:generate --name demo-user
+
+CREATE SPOTS table
+npx sequelize model:generate --name Spot --attributes userId:integer,address:string,city:string,state:string,country:string,lat:float,lng:float,name:string,description:text,price:float,previewImage:integer,avgRating:integer
+
+
+CREATE BOOKINGS TABLE
+npx sequelize model:generate --name Booking --attributes spotId:integer,userId:integer,startDate:date,endDate:date
+
+
+CREATE IMAGES TABLE
+npx sequelize model:generate --name Image --attributes url:string,preview:boolean,imagableId:integer,imagableType:string
+
+
+CREATE REVIEWS TABLE
+npx sequelize model:generate --name Review --attributes userId:integer,spotId:integer,review:text,stars:int
