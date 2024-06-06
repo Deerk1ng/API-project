@@ -33,7 +33,14 @@ module.exports = (sequelize, DataTypes) => {
   },
     imageableType: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        isType(value){
+          if(value !== 'PreviewImage' || value !== 'ReviewImage'){
+            throw new Error ('imageable type must be either ReviewImage or PreviewImage')
+          }
+        }
+      }
   }
   }, {
     sequelize,

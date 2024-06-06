@@ -18,3 +18,21 @@ npx sequelize model:generate --name Image --attributes url:string,preview:boolea
 
 CREATE REVIEWS TABLE
 npx sequelize model:generate --name Review --attributes userId:integer,spotId:integer,review:text,stars:integer
+
+
+GENERATE SEEDS
+
+npx sequelize seed:generate --name demo-spot
+npx sequelize seed:generate --name demo-booking
+npx sequelize seed:generate --name demo-image
+npx sequelize seed:generate --name demo-review
+
+
+SELECT QUERIES FOR TESTING
+
+SELECT spots.address, users.firstName FROM Spots
+    JOIN users on spots.ownerId = users.id;
+
+SELECT spots.address, users.firstName, bookings.id FROM bookings
+    JOIN users on bookings.userId = users.id
+    JOIN spots on bookings.spotId = spots.id;
