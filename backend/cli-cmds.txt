@@ -36,3 +36,7 @@ SELECT spots.address, users.firstName FROM Spots
 SELECT spots.address, users.firstName, bookings.id FROM bookings
     JOIN users on bookings.userId = users.id
     JOIN spots on bookings.spotId = spots.id;
+
+SELECT spots.address, images.url FROM spots
+JOIN Images on spots.id = images.imageableId
+where images.imageableType = 'PreviewImage';
