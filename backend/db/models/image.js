@@ -11,13 +11,30 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Image.belongsTo(models.Spot, {
+        foreignKey: 'imageableId',
+        constraints: false
+      })
+      Image.belongsTo(models.Review, {
+        foreignKey: 'imageableId',
+        constraints: false
+      })
     }
   }
   Image.init({
-    url: DataTypes.STRING,
+    url: {
+      type: DataTypes.STRING,
+      allowNull: false
+  },
     preview: DataTypes.BOOLEAN,
-    imagableId: DataTypes.INTEGER,
-    imagableType: DataTypes.STRING
+    imageableId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+  },
+    imageableType: {
+      type: DataTypes.STRING,
+      allowNull: false
+  }
   }, {
     sequelize,
     modelName: 'Image',

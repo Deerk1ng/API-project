@@ -15,10 +15,10 @@ module.exports = {
       preview: {
         type: Sequelize.BOOLEAN
       },
-      imagableId: {
+      imageableId: {
         type: Sequelize.INTEGER
       },
-      imagableType: {
+      imageableType: {
         type: Sequelize.STRING
       },
       createdAt: {
