@@ -1,6 +1,6 @@
 'use strict';
 const {
-  Model
+  Model, Op
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Spot extends Model {
@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "imageableId",
         constraints: false,
         scope: {
-          imageableType: 'PreviewImage'
+          imageableType: 'SpotImage'
         }
       })
     }
@@ -38,70 +38,114 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isAlphanumeric: true
+        notNull: {
+          msg: "Street address is required"
+        },
+        isEmpty(value){
+          if(!value){
+            throw new Error("Street address is required")
+          }
+        }
       }
     },
     city: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isAlpha: true
+        notNull: {
+          msg: "City is required"
+        },
+        isEmpty(value){
+          if(!value){
+            throw new Error("City is required")
+          }
+        }
       }
     },
     state: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isAlpha: true
+        notNull: {
+          msg: "State is required"
+        },
+        isEmpty(value){
+          if(!value){
+            throw new Error("State is required")
+          }
+        }
       }
     },
     country: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isAlpha: true
+        notNull: {
+          msg: "Country is required"
+        },
+        isEmpty(value){
+          if(!value){
+            throw new Error("Country is required")
+          }
+        }
       }
     },
     lat: {
       type: DataTypes.FLOAT,
       allowNull: false,
       validate: {
-        min: -90,
-        max: 90
+        min: {
+          args: -90,
+        msg: "Latitude must be within -90 and 90"
+      },
+        max: {
+        args: 90,
+        msg: "Latitude must be within -90 and 90"
+      },
       }
     },
     lng: {
       type: DataTypes.FLOAT,
       allowNull: false,
       validate: {
-        min: -180,
-        max: 180
+        min: {
+          args: -180,
+        msg: "Longitude must be within -180 and 180"
+      },
+        max: {
+        args: 180,
+        msg: "Longitude must be within -180 and 180"
+      },
       }
     },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: [4, 50]
+        len: {args:[4, 50], msg: "Name must be less than 50 characters"}
       }
     },
     description: {
       type: DataTypes.TEXT,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: "Description is required"
+        },
+        isEmpty(value){
+          if(!value){
+            throw new Error("Description is required")
+          }
+        }
+      }
     },
     price: {
       type: DataTypes.FLOAT,
       allowNull: false,
       validate: {
-        min: 1
+        min: {args: 1, msg: "Price per day must be a positive number"}
       }
     },
-    previewImage: {
-      type: DataTypes.INTEGER
-    },
-    avgRating: {
-      type: DataTypes.INTEGER
-    }
   }, {
     sequelize,
     modelName: 'Spot',

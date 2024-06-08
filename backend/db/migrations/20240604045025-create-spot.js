@@ -1,4 +1,7 @@
 'use strict';
+
+const { handleValidationErrors } = require('../../utils/validation');
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -21,23 +24,38 @@ module.exports = {
       },
       city: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+
+        }
       },
       state: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+
+        }
       },
       country: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        validate: {
+
+        }
       },
       lat: {
         type: Sequelize.FLOAT,
-        allowNull: false
+        allowNull: false,
+        validate: {
+
+        }
       },
       lng: {
         type: Sequelize.FLOAT,
-        allowNull: false
+        allowNull: false,
+        validate: {
+
+        }
       },
       name: {
         type: Sequelize.STRING

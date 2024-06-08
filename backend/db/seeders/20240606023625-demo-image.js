@@ -3,12 +3,17 @@
 const data = [{
   "url": "image url",
   "preview": true,
-  "imageableType": 'PreviewImage',
+  "imageableType": 'SpotImage',
   "imageableId" : 1
 },{
   "url": "image url 3",
   "preview": false,
   "imageableType": 'ReviewImage',
+  "imageableId" : 1
+},{
+  "url": "image url 4",
+  "preview": false,
+  "imageableType": 'SpotImage',
   "imageableId" : 1
 },
 ]

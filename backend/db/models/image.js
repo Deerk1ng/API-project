@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Image extends Model {
     /**
@@ -35,11 +36,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isType(value){
-          if(value !== 'PreviewImage' || value !== 'ReviewImage'){
-            throw new Error ('imageable type must be either ReviewImage or PreviewImage')
-          }
-        }
+        isIn: {
+          args: [['SpotImage', 'ReviewImage']],
+          msg: "imageable type must be either ReviewImage or SpotImage"
+       }
       }
   }
   }, {
