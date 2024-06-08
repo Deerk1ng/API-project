@@ -96,11 +96,11 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         min: {
           args: -90,
-        msg: "Latitude must be within -90 and 90"
+        msg: "Latitude is not valid"
       },
         max: {
         args: 90,
-        msg: "Latitude must be within -90 and 90"
+        msg: "Latitude is not valid"
       },
       }
     },
@@ -110,11 +110,11 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         min: {
           args: -180,
-        msg: "Longitude must be within -180 and 180"
+        msg: "Longitude is not valid"
       },
         max: {
         args: 180,
-        msg: "Longitude must be within -180 and 180"
+        msg: "Longitude is not valid"
       },
       }
     },
@@ -143,7 +143,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.FLOAT,
       allowNull: false,
       validate: {
-        min: {args: 1, msg: "Price per day must be a positive number"}
+        min: {args: 1, msg: "Price per day is required"}
       }
     },
   }, {

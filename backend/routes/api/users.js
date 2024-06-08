@@ -12,28 +12,54 @@ const validateSignup = [
   check('email')
     .exists({ checkFalsy: true })
     .isEmail()
-    .withMessage('Please provide a valid email.'),
+    .withMessage('Invalid email'),
   check('username')
     .exists({ checkFalsy: true })
     .isLength({ min: 4 })
-    .withMessage('Please provide a username with at least 4 characters.'),
+    .withMessage('Username is required'),
   check('username')
     .not()
     .isEmail()
     .withMessage('Username cannot be an email.'),
-  check('password')
-    .exists({ checkFalsy: true })
-    .isLength({ min: 6 })
-    .withMessage('Password must be 6 characters or more.'),
+  // check('password')
+  //   .exists({ checkFalsy: true })
+  //   .isLength({ min: 6 })
+  //   .withMessage('Password is required.'),
+    check('firstName')
+     .exists({checkFalsy: true})
+     .isLength({min:1})
+     .withMessage("First Name is required"),
+     check('lastName')
+     .exists({checkFalsy: true})
+     .isLength({min:1})
+     .withMessage("Last Name is required"),
   handleValidationErrors
 ];
 
 router.post(
   '/',
   validateSignup,
-  async (req, res) => {
+  async (req, res, next) => {
     const { email, password, username, firstName, lastName } = req.body;
     const hashedPassword = bcrypt.hashSync(password);
+
+    const userExistsEmail = await User.findOne({where: {email: email}})
+    const userExistsUsername = await User.findOne({where: {username: username}})
+
+    if(userExistsEmail || userExistsUsername){
+      const err = new Error("User already exists");
+      err.status = 500;
+      err.message = "User already exists";
+      err.errors = {}
+      if(userExistsEmail){
+        err.errors.email = "User with that email already exists"
+      }
+      if(userExistsUsername){
+        err.errors.username = "User with that username already exists"
+      }
+      return next(err);
+    }
+
     const user = await User.create({ email, username, hashedPassword, firstName, lastName });
 
     const safeUser = {
@@ -45,7 +71,7 @@ router.post(
     };
 
     await setTokenCookie(res, safeUser);
-
+    res.status(201)
     return res.json({
       user: safeUser
     });

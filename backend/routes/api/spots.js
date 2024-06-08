@@ -2,6 +2,7 @@ const express = require('express')
 
 const { Spot, Review, Image, User } = require('../../db/models')
 const {requireAuth} = require('../../utils/auth')
+const { handleValidationErrors } = require('../../utils/validation')
 const router = express.Router();
 
 const noSpot = function () {
@@ -19,7 +20,7 @@ const userNotAuth = function() {
 
 
 router.get('/', async (req, res) => {
-    const spots = await Spot.findAll()
+    const spots = {Spots: await Spot.findAll()}
     //need to add preview image and avgRating aggregate data instead of hard coded
     return res.json(spots)
 })
@@ -33,11 +34,11 @@ router.get('/current', requireAuth, async (req, res, next) => {
     //     err.message = 'User not logged in';
     //     return next(err);
     // }
-    const spots = await Spot.findAll({
+    const spots = {Spots: await Spot.findAll({
         where: {
             ownerId: user.id
         }
-    })
+    })} //need avg rating and preview image
 
     return res.json(spots)
 })
@@ -90,7 +91,7 @@ router.get('/:spotId', async (req, res, next) => {
     return res.json(newSpot)
 })
 
-router.post('/', async (req, res)=> {
+router.post('/', requireAuth, async (req, res)=> {
     const {address, city, state, country, lat, lng, name, description, price } = req.body
     const { user } = req
 
@@ -130,6 +131,7 @@ router.post("/:spotId/images", requireAuth, async (req, res, next) => {
     })
 
     const safeImg = {
+        id: newImg.id,
         url: newImg.url,
         preview: newImg.preview,
     }
@@ -137,7 +139,7 @@ router.post("/:spotId/images", requireAuth, async (req, res, next) => {
     return res.json(safeImg)
 })
 
-router.put('/:spotId', requireAuth, async (req, res, next) => {
+router.put('/:spotId', requireAuth, handleValidationErrors, async (req, res, next) => {
     const { user } = req
     const spot = await Spot.findByPk(req.params.spotId)
     if(!spot){
@@ -149,8 +151,7 @@ router.put('/:spotId', requireAuth, async (req, res, next) => {
 
     const {address, city, state, country, lat, lng, name, description, price} = req.body
 
-    const newSpot = await Spot.create({
-        ownerId: user.id,
+    spot.update({
         address,
         city,
         state,
@@ -160,9 +161,8 @@ router.put('/:spotId', requireAuth, async (req, res, next) => {
         name,
         description,
         price
-    })
+    }) //does not handle errors well
 
-    spot.update(newSpot)
     return res.json(spot)
 })
 
