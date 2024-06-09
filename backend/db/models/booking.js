@@ -17,15 +17,15 @@ module.exports = (sequelize, DataTypes) => {
     spotId: DataTypes.INTEGER,
     userId: DataTypes.INTEGER,
     startDate: {
-      type: DataTypes.DATEONLY,
+      type: DataTypes.DATE,
       validate: {
       }
     },
     endDate: {
-      type: DataTypes.DATEONLY,
-      validate: {
-        isAfter: this.startDate,
-      }
+      type: DataTypes.DATE,
+      // validate: {
+      //   isAfter: this.startDate,
+      // }
     }
   }, {
     sequelize,
