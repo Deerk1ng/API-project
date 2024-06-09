@@ -1,5 +1,8 @@
 'use strict';
-
+let options = {};
+if (process.env.NODE_ENV === 'production') {
+  options.schema = process.env.SCHEMA;
+};
 const data = [{
   "ownerId": 2,
   "address": "AAAAABBBBCCCC",
@@ -40,8 +43,10 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-
-     await queryInterface.bulkInsert('Spots', data)
+    options.tableName = "Spots"
+    options.validate = true
+    const { Spot } = require('../models')
+     await Spot.bulkCreate(data, options)
   },
 
   async down (queryInterface, Sequelize) {
