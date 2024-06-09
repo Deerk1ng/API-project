@@ -1,4 +1,8 @@
 'use strict';
+let options = {};
+if (process.env.NODE_ENV === 'production') {
+  options.schema = process.env.SCHEMA;
+};
 const data = [{
   "spotId": 1,
   "userId": 2,
@@ -10,10 +14,7 @@ const data = [{
 "startDate": "2021-12-19",
 "endDate": "2021-12-20"
 }]
-let options = {};
-if (process.env.NODE_ENV === 'production') {
-  options.schema = process.env.SCHEMA;
-};
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
