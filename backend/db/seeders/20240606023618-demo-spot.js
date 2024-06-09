@@ -46,7 +46,7 @@ module.exports = {
     options.tableName = "Spots"
     options.validate = true
     const { Spot } = require('../models')
-     await Spot.bulkCreate(data, options)
+    await Spot.bulkCreate(data, options)
   },
 
   async down (queryInterface, Sequelize) {
