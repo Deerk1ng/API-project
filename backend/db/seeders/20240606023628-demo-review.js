@@ -11,7 +11,10 @@ const data = [{
    "review": "This was an awesome spot!",
    "stars": 4
   }]
-
+  let options = {};
+  if (process.env.NODE_ENV === 'production') {
+    options.schema = process.env.SCHEMA;
+  };
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
@@ -24,8 +27,10 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-
-    await queryInterface.bulkInsert('Reviews', data, {})
+    options.tableName = "Reviews"
+    options.validate = true
+    const { Review } = require('../models')
+    await Review.bulkCreate(data, options)
   },
 
   async down (queryInterface, Sequelize) {

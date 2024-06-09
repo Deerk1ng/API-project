@@ -10,7 +10,10 @@ const data = [{
 "startDate": "2021-12-19",
 "endDate": "2021-12-20"
 }]
-
+let options = {};
+if (process.env.NODE_ENV === 'production') {
+  options.schema = process.env.SCHEMA;
+};
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
@@ -23,8 +26,10 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-
-     await queryInterface.bulkInsert('Bookings', data, {})
+    options.tableName = "Bookings"
+    options.validate = true
+    const { Booking } = require('../models')
+    await Booking.bulkCreate(data, options)
   },
 
   async down (queryInterface, Sequelize) {
