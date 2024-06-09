@@ -25,7 +25,7 @@ module.exports = {
      * await queryInterface.bulkInsert('People', [{
      *   name: 'John Doe',
      *   isBetaMember: false
-     * }], {});
+     * }], {})
     */
     options.tableName = "Bookings"
     options.validate = true
