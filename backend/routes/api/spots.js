@@ -72,7 +72,7 @@ router.get('/current', requireAuth, async (req, res, next) => {
                 attributes: []
             }
         ],
-        group: ['Spot.id']
+        group: ['Spot.id', 'Images.url']
     })}
 
     return res.json(spots)
