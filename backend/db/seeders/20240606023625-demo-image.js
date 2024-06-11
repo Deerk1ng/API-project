@@ -22,6 +22,10 @@ const data = [{
   "imageableId" : 2
 },
 ]
+let options = {};
+if (process.env.NODE_ENV === 'production') {
+  options.schema = process.env.SCHEMA;
+};
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
@@ -34,8 +38,10 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-
-     await queryInterface.bulkInsert('Images', data, {})
+    options.tableName = "Images"
+    options.validate = true
+    const { Image } = require('../models')
+    await Image.bulkCreate(data, options)
   },
 
   async down (queryInterface, Sequelize) {
