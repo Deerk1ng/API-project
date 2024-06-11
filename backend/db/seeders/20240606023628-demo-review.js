@@ -10,7 +10,17 @@ const data = [{
    "spotId": 2,
    "review": "This was an awesome spot!",
    "stars": 4
-  }]
+  },{
+    "userId": 2,
+    "spotId": 2,
+    "review": "This was an awesome spot!",
+    "stars": 2
+   },{
+    "userId": 1,
+    "spotId": 2,
+    "review": "This was an awesome spot!",
+    "stars": 1
+   }]
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {

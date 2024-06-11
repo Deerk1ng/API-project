@@ -15,6 +15,11 @@ const data = [{
   "preview": false,
   "imageableType": 'SpotImage',
   "imageableId" : 1
+},{
+  "url": "image url 2",
+  "preview": true,
+  "imageableType": 'SpotImage',
+  "imageableId" : 2
 },
 ]
 /** @type {import('sequelize-cli').Migration} */
