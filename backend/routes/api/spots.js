@@ -37,7 +37,7 @@ router.get('/', async (req, res) => {
                 attributes: []
             }
         ],
-        group: ['Spot.id', 'Image.url'] // splits AVG function and keeps it from averaging all reviews
+        group: ['Spot.id', 'Images.url'] // splits AVG function and keeps it from averaging all reviews
     })}
 
     return res.json(spots)
