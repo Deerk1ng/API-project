@@ -1,8 +1,8 @@
 const express = require('express')
 
-const { Spot, Review, Image, User } = require('../../db/models')
+const { Spot, Review, Image, User, sequelize } = require('../../db/models')
 const {requireAuth} = require('../../utils/auth')
-const { handleValidationErrors } = require('../../utils/validation')
+const { handleValidationErrors } = require('../../utils/validation');
 const router = express.Router();
 
 const noSpot = function () {
@@ -20,8 +20,26 @@ const userNotAuth = function() {
 
 
 router.get('/', async (req, res) => {
-    const spots = {Spots: await Spot.findAll()}
-    //need to add preview image and avgRating aggregate data instead of hard coded
+    const spots = {Spots: await Spot.findAll({
+        attributes: { //as an object + includes will show all original keys and also add whatever is under includes
+            include: [
+                [sequelize.col('url'), 'previewImage'], //finds Image.url and displays under key previewImage
+                [sequelize.fn('AVG', sequelize.col('Reviews.stars')), 'avgRating'] //gets AVG under the name of avgRating
+            ],
+        },
+        include: [
+            {
+                model: Image,
+                attributes: []
+            },
+            {
+                model: Review,
+                attributes: []
+            }
+        ],
+        group: ['Spot.id'] // splits AVG function and keeps it from averaging all reviews
+    })}
+
     return res.json(spots)
 })
 
@@ -37,8 +55,25 @@ router.get('/current', requireAuth, async (req, res, next) => {
     const spots = {Spots: await Spot.findAll({
         where: {
             ownerId: user.id
-        }
-    })} //need avg rating and preview image
+        },
+        attributes: { //as an object + includes will show all original keys and also add whatever is under includes
+            include: [
+                [sequelize.col('url'), 'previewImage'], //finds Image.url and displays under key previewImage
+                [sequelize.fn('AVG', sequelize.col('Reviews.stars')), 'avgRating'] //gets AVG under the name of avgRating
+            ],
+        },
+        include: [
+            {
+                model: Image,
+                attributes: []
+            },
+            {
+                model: Review,
+                attributes: []
+            }
+        ],
+        group: ['Spot.id']
+    })}
 
     return res.json(spots)
 })
@@ -151,19 +186,21 @@ router.put('/:spotId', requireAuth, handleValidationErrors, async (req, res, nex
 
     const {address, city, state, country, lat, lng, name, description, price} = req.body
 
-    spot.update({
-        address,
-        city,
-        state,
-        country,
-        lat,
-        lng,
-        name,
-        description,
-        price
-    }) //does not handle errors well
 
-    return res.json(spot)
+    await spot.update({
+            address,
+            city,
+            state,
+            country,
+            lat,
+            lng,
+            name,
+            description,
+            price
+        }) //does not handle errors well
+
+        return res.json(spot)
+
 })
 
 router.delete('/:spotId', requireAuth, async(req, res, next) => {
