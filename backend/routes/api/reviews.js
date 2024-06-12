@@ -47,7 +47,7 @@ router.get('/current', requireAuth, async (req, res) => {
           'price',
           [sequelize.literal(`(SELECT url FROM Images WHERE Images.imageableId = Spot.id AND Images.imageableType = 'SpotImage' AND Images.preview = 1 LIMIT 1)`), 'previewImage']
         ],
-        include: [{
+        include: [{ //relation \"images\" does not exist
           model: Image,
           where: {
             preview: true
