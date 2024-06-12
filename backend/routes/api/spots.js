@@ -14,7 +14,7 @@ const noSpot = function () {
 const userNotAuth = function() {
     const err = new Error("User is not Authorized to edit this spot");
     err.status = 401;
-    err.message = "Spot does not belong to user";
+    err.message = "Spot must belong to the current user";
     return err;
 }
 
@@ -45,13 +45,7 @@ router.get('/', async (req, res) => {
 
 router.get('/current', requireAuth, async (req, res, next) => {
     const { user } = req
-    //need to add preview image and avgRating aggregate data instead of hard coded
-    // if(!user){
-    //     const err = new Error('User not logged in');
-    //     err.status = 401;
-    //     err.message = 'User not logged in';
-    //     return next(err);
-    // }
+
     const spots = {Spots: await Spot.findAll({
         where: {
             ownerId: user.id
@@ -197,7 +191,7 @@ router.put('/:spotId', requireAuth, handleValidationErrors, async (req, res, nex
             name,
             description,
             price
-        }) //does not handle errors well
+        })
 
         return res.json(spot)
 
@@ -213,13 +207,68 @@ router.delete('/:spotId', requireAuth, async(req, res, next) => {
         return next(userNotAuth());
     }
 
-    spot.destroy()
+    await spot.destroy()
 
     return res.json(    {
         "message": "Successfully deleted"
       })
 })
 
+router.get('/:spotId/reviews', async (req, res, next) => {
+    const spot = await Spot.findByPk(req.params.spotId)
+    if(!spot){
+        return next(noSpot())
+    }
+    const reviews = await Review.findAll({
+        where:{
+          spotId: req.params.spotId
+        },
+        include: [
+          {
+            model: User,
+            attributes: ['id', 'firstName', 'lastName']
+          },
+          {
+            model: Image,
+            as: 'ReviewImages',
+            attributes: ['id', 'url']
+          },
+        ]
+        })
+    return res.json({Reviews: reviews})
+})
+
+router.post('/:spotId/reviews', requireAuth, handleValidationErrors, async (req,res, next) => {
+    const {user} = req
+    const {review, stars} = req.body
+    const spot = await Spot.findByPk(req.params.spotId)
+    if(!spot){
+        return next(noSpot())
+    }
+    const checkUserReview = await Review.findOne({
+        where: {
+            userId: user.id,
+            spotId: req.params.spotId
+        }
+    })
+
+    if(checkUserReview){
+        console.log("CURRENT USER", user, user.id, checkUserReview)
+        const err = new Error("User already reviewed this spot");
+        err.status = 500;
+        err.message = "User already has a review for this spot";
+        return next(err);
+    }
+
+    const newReview = await Review.create({
+        userId: user.id,
+        spotId: req.params.spotId,
+        review,
+        stars
+    })
+    res.status(201)
+    return res.json(newReview)
+})
 module.exports = router;
 
 //

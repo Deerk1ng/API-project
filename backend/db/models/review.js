@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       Review.belongsTo(models.User, {foreignKey: 'userId'})
       Review.hasMany(models.Image, {
         foreignKey: "imageableId",
+        as: "ReviewImages",
         constraints: false,
         scope: {
           imageableType: 'ReviewImage'
@@ -25,8 +26,26 @@ module.exports = (sequelize, DataTypes) => {
   Review.init({
     userId: DataTypes.INTEGER,
     spotId: DataTypes.INTEGER,
-    review: DataTypes.TEXT,
-    stars: DataTypes.INTEGER
+    review: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: "Review text is required"
+        }
+      }
+    },
+    stars: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        min: {
+          args: 1,
+          msg: "Stars must be an integer from 1 to 5"
+        }
+      }
+    }
   }, {
     sequelize,
     modelName: 'Review',
