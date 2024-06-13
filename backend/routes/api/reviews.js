@@ -3,6 +3,7 @@ const express = require('express')
 const { Review, User, Spot, Image, sequelize } = require('../../db/models')
 const {requireAuth} = require('../../utils/auth')
 const { handleValidationErrors } = require('../../utils/validation');
+const {environment} = require('../../config')
 
 const router = express.Router();
 
@@ -22,6 +23,11 @@ const userNotAuth = function() {
 
 router.get('/current', requireAuth, async (req, res) => {
   const { user } = req
+
+  let sqlLit = `(SELECT url FROM Images WHERE Images.imageableId = Spot.id AND Images.imageableType = 'SpotImage' AND Images.preview = 1 LIMIT 1)`
+  if(environment === 'production') {
+    sqlLit = `(SELECT url FROM Images WHERE ${process.env.SCHEMA}.Images.imageableId = Spot.id AND ${process.env.SCHEMA}.Images.imageableType = 'SpotImage' AND ${process.env.SCHEMA}.Images.preview = 1 LIMIT 1)`
+  }
 
   const reviews = await Review.findAll({
     where:{
@@ -45,7 +51,7 @@ router.get('/current', requireAuth, async (req, res) => {
           'lng',
           'name',
           'price',
-          [sequelize.literal(`(SELECT url FROM Images WHERE Images.imageableId = Spot.id AND Images.imageableType = 'SpotImage' AND Images.preview = 1 LIMIT 1)`), 'previewImage']
+          [sequelize.literal(sqlLit), 'previewImage']
         ],
         include: [{ //relation \"images\" does not exist
           model: Image,

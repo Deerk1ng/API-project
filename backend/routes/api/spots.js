@@ -1,6 +1,6 @@
 const express = require('express')
 
-const { Spot, Review, Image, User, sequelize } = require('../../db/models')
+const { Spot, Review, Image, User, sequelize, Booking } = require('../../db/models')
 const {requireAuth} = require('../../utils/auth')
 const { handleValidationErrors } = require('../../utils/validation');
 const router = express.Router();
@@ -70,6 +70,34 @@ router.get('/current', requireAuth, async (req, res, next) => {
     })}
 
     return res.json(spots)
+})
+
+router.get('/:spotId/bookings', requireAuth, async (req, res, next)=> {
+    const { user } = req
+    const spot = await Spot.findByPk(req.params.spotId)
+
+    if(!spot) next(noSpot())
+
+    let attr1 = attr2 = null
+    if(user.id !== spot.ownerId){
+        attr1 = ['spotId','startDate', 'endDate']
+    } else {
+        attr2 = ['id', 'firstName', 'lastName']
+        attr1 = {
+            include: ['id']
+        }
+    }
+    const bookings = await Booking.findAll({
+        where: {
+            spotId: req.params.spotId
+        },
+        include: {
+            model: User,
+            attributes: attr2
+        },
+        attributes: attr1
+    })
+    return res.json({Bookings: bookings})
 })
 
 router.get('/:spotId', async (req, res, next) => {
@@ -166,6 +194,10 @@ router.post("/:spotId/images", requireAuth, async (req, res, next) => {
     }
     res.status(201)
     return res.json(safeImg)
+})
+
+router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
+
 })
 
 router.put('/:spotId', requireAuth, handleValidationErrors, async (req, res, next) => {
