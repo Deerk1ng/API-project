@@ -197,6 +197,61 @@ router.post("/:spotId/images", requireAuth, async (req, res, next) => {
 })
 
 router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
+    const {user} = req
+    const spot = await Spot.findByPk(req.params.spotId)
+    if(!spot){
+        return next(noSpot())
+    }
+    if(spot.ownerId == user.id){
+        const err = new Error("User cannot book their own spot");
+        err.message = "Spot must NOT belong to the current user";
+        return err;
+    }
+
+    const {startDate, endDate} = req.body
+    const allBookings = await Booking.findAll({
+        where: {
+            spotId: req.params.spotId
+        },
+        attributes: ['startDate', 'endDate']
+    })
+
+    let start = end = 0
+    const isBooked = allBookings.filter(el => /* !((startDate > el.endDate) || (endDate < el.startDate))) */
+        {
+            if(!((startDate > el.endDate) || (startDate < el.startDate && endDate < el.startDate))) {
+                start++
+                return true
+            } else if(!((endDate < el.startDate) || (endDate > el.endDate && startDate > el.endDate))){
+                end++
+                return true
+            } else {
+                return false
+            }
+        })
+    if(!isBooked.length){
+        const newBooking = await Booking.create({
+            spotId: req.params.spotId,
+            userId: user.id,
+            startDate,
+            endDate
+        })
+        return res.json(newBooking)
+    } else {
+        if(start || end){
+            const err = new Error("Booking conflict");
+            err.status = 403;
+            err.message = "Sorry, this spot is already booked for the specified dates";
+            err.errors = {}
+            if(start){
+              err.errors.startDate = "Start date conflicts with an existing booking"
+            }
+            if(end){
+              err.errors.endDate = "End date conflicts with an existing booking"
+            }
+            return next(err);
+          }
+    }
 
 })
 
