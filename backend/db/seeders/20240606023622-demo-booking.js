@@ -14,7 +14,8 @@ const data = [{
   "userId": 3,
   "startDate": "2025-12-19",
   "endDate": "2025-12-20"
-}]
+},
+]
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {

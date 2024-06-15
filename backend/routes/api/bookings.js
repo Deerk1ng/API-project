@@ -3,7 +3,7 @@ const express = require('express')
 const { Booking, Spot, sequelize } = require('../../db/models')
 const {requireAuth} = require('../../utils/auth')
 const { handleValidationErrors } = require('../../utils/validation');
-const spot = require('../../db/models/spot');
+
 const router = express.Router();
 const {environment} = require('../../config')
 
@@ -57,11 +57,91 @@ router.get('/current', requireAuth, async (req,res,next) => {
 })
 
 router.put('/:bookingId', requireAuth, handleValidationErrors, async (req,res,next) => {
-    return res.json()
+    const {user} = req
+    const booking = await Booking.findByPk(req.params.bookingId)
+
+    if(!booking){
+        return next(noBooking())
+    }
+    if(booking.userId !== user.id){
+        return next(userNotAuth())
+    }
+
+    const {startDate, endDate} = req.body
+
+    const allBookings = await Booking.findAll({
+        where: {
+            spotId: booking.spotId
+        },
+        attributes: ['startDate', 'endDate']
+    })
+
+    let start = end = 0
+    const isBooked = allBookings.filter(el => {
+        if(!((startDate > el.endDate.split(" ")[0]) || (endDate < el.startDate.split(" ")[0]))){
+        if(startDate >= el.startDate.split(" ")[0] && startDate <= el.endDate.split(" ")[0]){
+            start++
+        }
+        if(endDate >= el.startDate.split(" ")[0] && endDate <= el.endDate.split(" ")[0]){
+            end++
+        }
+        if(startDate < el.startDate.split(" ")[0] && endDate > el.endDate.split(" ")[0]){
+            start++
+            end++
+        }
+        return true
+    }
+    return false
+})
+
+    if(!isBooked.length){
+        await booking.update({
+                startDate,
+                endDate
+            })
+        return res.json(booking)
+    } else {
+        // if(start || end){
+            const err = new Error("Booking conflict");
+            err.status = 403;
+            err.message = "Sorry, this spot is already booked for the specified dates";
+            err.errors = {}
+            if(start){
+              err.errors.startDate = "Start date conflicts with an existing booking"
+            }
+            if(end){
+              err.errors.endDate = "End date conflicts with an existing booking"
+            }
+            return next(err);
+        }
+
 })
 
 router.delete('/:bookingId', requireAuth, async (req,res,next) => {
-    return res.json()
+    const {user} = req
+    const booking = await Booking.findByPk(req.params.bookingId)
+
+    if(!booking){
+        return next(noBooking())
+    }
+    const spot = await Spot.findByPk(booking.spotId)
+    if(booking.userId !== user.id && user.id !== spot.ownerId){
+        const err = new Error("User is not Authorized to edit this booking");
+        err.status = 401;
+        err.message = "Booking must belong to the current user or the Spot must belong to the current user";
+        return next(err)
+    }
+    if(booking.startDate < new Date()){
+        const err = new Error("Booking has already begun");
+        err.status = 403;
+        err.message = "Bookings that have been started can't be deleted";
+        return err;
+    }
+    await booking.destroy()
+
+    return res.json(    {
+        "message": "Successfully deleted"
+      })
 })
 
 module.exports = router;

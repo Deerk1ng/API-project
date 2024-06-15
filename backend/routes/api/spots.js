@@ -1,6 +1,7 @@
 const express = require('express')
 
 const { Spot, Review, Image, User, sequelize, Booking } = require('../../db/models')
+const { Op } = require('sequelize')
 const {requireAuth} = require('../../utils/auth')
 const { handleValidationErrors } = require('../../utils/validation');
 const router = express.Router();
@@ -19,8 +20,79 @@ const userNotAuth = function() {
 }
 
 
-router.get('/', async (req, res) => {
-    const spots = {Spots: await Spot.findAll({
+router.get('/', async (req, res, next) => {
+    let {page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice} = req.query
+
+    let offset = limit = null
+    const where = {}
+
+    if(page || size || minLat || maxLat || minLng || maxLng || minPrice || maxPrice){
+        const err = new Error("Query Body Validation Error")
+        err.status = 400
+        err.message = "Bad Request"
+        err.errors = {}
+        if(size){
+            if(!isNaN(size) && size > 0){
+                size = Number(size)
+                if (size > 20) size = 20
+                limit = size
+            } else err.errors.size = "Size must be greater than or equal to 1"
+        }
+
+        if(page){
+            if(!isNaN(page) && page > 0){
+                page = Number(page)
+                offset = (page - 1) * size
+            } else err.errors.page =  "Page must be greater than or equal to 1"
+        }
+
+        if(minLat){
+            if(!isNaN(minLat) && (minLat < 90 || minLat > -90)){
+                where.lat = {[Op.gte]: minLat}
+            } else err.errors.minLat = "Minimum latitude is invalid"
+        }
+
+        if(maxLat){
+            if(!isNaN(maxLat) && (maxLat < 90 || maxLat > -90)){
+                if(where.lat) where.lat = {[Op.between]: [minLat, maxLat]}
+                else where.lat = {[Op.lte]: maxLat}
+            } else err.errors.maxLat = "Maximum latitude is invalid"
+        }
+
+        if(minLng){
+            if(!isNaN(minLng) && (minLng < 180 || minLng > -180)){
+                where.lng = {[Op.gte]: minLng}
+            } else err.errors.minLng = "Minimum longitude is invalid"
+        }
+
+        if(maxLng){
+            if(!isNaN(maxLng) && (maxLng < 180 || maxLng > -180)){
+                if(where.lng) where.lng = {[Op.between]: [minLng, maxLng]}
+                else where.lng = {[Op.lte]: maxLng}
+            } else err.errors.maxLng = "Maximum longitude is invalid"
+        }
+
+        if(maxPrice){
+            if(!isNaN(maxPrice) && maxPrice > 0){
+                where.price = {[Op.lte]: maxPrice}
+            } else err.errors.maxPrice = "Maximum price must be greater than or equal to 0"
+        }
+
+        if(minPrice){
+            if(!isNaN(minPrice) && minPrice > 0){
+                if(where.price) where.price = {[Op.between]: [minPrice, maxPrice]}
+                else where.price = {[Op.gte]: minPrice}
+            } else err.errors.minPrice = "Minimum price must be greater than or equal to 0"
+        }
+        const keys = Object.keys(err.errors)
+        if(keys.length){
+            return next(err);
+        }
+    }
+
+
+    const spots = await Spot.findAll({
+        where,
         attributes: { //as an object + includes will show all original keys and also add whatever is under includes
             include: [
                 [sequelize.col('url'), 'previewImage'], //finds Image.url and displays under key previewImage
@@ -37,10 +109,13 @@ router.get('/', async (req, res) => {
                 attributes: []
             }
         ],
-        group: ['Spot.id', 'Images.url'] // splits AVG function and keeps it from averaging all reviews
-    })}
+        limit,
+        offset,
+        subQuery: false,
+        group: ['Spot.id', 'Images.url'], // splits AVG function and keeps it from averaging all reviews
+})
 
-    return res.json(spots)
+    return res.json({Spots: spots, page, size})
 })
 
 router.get('/current', requireAuth, async (req, res, next) => {
@@ -78,7 +153,8 @@ router.get('/:spotId/bookings', requireAuth, async (req, res, next)=> {
 
     if(!spot) next(noSpot())
 
-    let attr1 = attr2 = null
+    let attr1 = []
+    let attr2 = []
     if(user.id !== spot.ownerId){
         attr1 = ['spotId','startDate', 'endDate']
     } else {
@@ -205,7 +281,7 @@ router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
     if(spot.ownerId == user.id){
         const err = new Error("User cannot book their own spot");
         err.message = "Spot must NOT belong to the current user";
-        return err;
+        return next(err);
     }
 
     const {startDate, endDate} = req.body
@@ -217,41 +293,47 @@ router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
     })
 
     let start = end = 0
-    const isBooked = allBookings.filter(el => /* !((startDate > el.endDate) || (endDate < el.startDate))) */
-        {
-            if(!((startDate > el.endDate) || (startDate < el.startDate && endDate < el.startDate))) {
+    const isBooked = allBookings.filter(el => {
+        if(!((startDate > el.endDate.split(" ")[0]) || (endDate < el.startDate.split(" ")[0]))){
+            if(startDate >= el.startDate.split(" ")[0] && startDate <= el.endDate.split(" ")[0]){
                 start++
-                return true
-            } else if(!((endDate < el.startDate) || (endDate > el.endDate && startDate > el.endDate))){
-                end++
-                return true
-            } else {
-                return false
             }
-        })
+            if(endDate >= el.startDate.split(" ")[0] && endDate <= el.endDate.split(" ")[0]){
+                end++
+            }
+            if(startDate < el.startDate.split(" ")[0] && endDate > el.endDate.split(" ")[0]){
+                start++
+                end++
+            }
+            return true
+        }
+        return false
+    })
+
     if(!isBooked.length){
-        const newBooking = await Booking.create({
+        let newBooking = await Booking.create({
             spotId: req.params.spotId,
             userId: user.id,
             startDate,
             endDate
         })
-        return res.json(newBooking)
+        console.log(newBooking.toJSON())
+        res.status(201)
+        return res.json(newBooking.toJSON())
     } else {
-        if(start || end){
-            const err = new Error("Booking conflict");
-            err.status = 403;
-            err.message = "Sorry, this spot is already booked for the specified dates";
-            err.errors = {}
-            if(start){
-              err.errors.startDate = "Start date conflicts with an existing booking"
-            }
-            if(end){
-              err.errors.endDate = "End date conflicts with an existing booking"
-            }
-            return next(err);
-          }
+        const err = new Error("Booking conflict");
+        err.status = 403;
+        err.message = "Sorry, this spot is already booked for the specified dates";
+        err.errors = {}
+        if(start){
+            err.errors.startDate = "Start date conflicts with an existing booking"
+        }
+        if(end){
+            err.errors.endDate = "End date conflicts with an existing booking"
+        }
+        return next(err);
     }
+        // return res.json({allBookings, isBooked, startDate, endDate})
 
 })
 
