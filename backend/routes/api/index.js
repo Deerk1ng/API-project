@@ -90,13 +90,13 @@ router.delete('/review-images/:imageId', requireAuth, async (req, res, next) => 
     err.status = 401;
     err.message = "Review must belong to the current user";
     return next(err);
+  } else {
+    await image.destroy()
+
+    return res.json(    {
+      "message": "Successfully deleted"
+    })
   }
-
-  await image.destroy()
-
-  return res.json(    {
-    "message": "Successfully deleted"
-  })
 })
 
 

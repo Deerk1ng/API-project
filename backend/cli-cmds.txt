@@ -40,3 +40,8 @@ SELECT spots.address, users.firstName, bookings.id FROM bookings
 SELECT spots.address, images.url FROM spots
 JOIN Images on spots.id = images.imageableId
 where images.imageableType = 'PreviewImage';
+
+
+SELECT url FROM "airbnb_tables"."Images" WHERE airbnb_tables.Images.imageableId = Spot.id AND airbnb_tables.Images.imageableType = 'SpotImage' AND airbnb_tables.Images.preview = 1
+
+SELECT url FROM Images WHERE Images.imageableId = Spot.id AND Images.imageableType = 'SpotImage' AND Images.preview = 1 LIMIT 1

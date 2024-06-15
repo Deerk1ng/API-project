@@ -333,7 +333,6 @@ router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
         }
         return next(err);
     }
-        // return res.json({allBookings, isBooked, startDate, endDate})
 
 })
 

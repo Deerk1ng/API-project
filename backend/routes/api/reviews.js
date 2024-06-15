@@ -28,7 +28,7 @@ router.get('/current', requireAuth, async (req, res) => {
   if(environment === 'production') {
     sqlLit = `(SELECT url FROM Images WHERE ${process.env.SCHEMA}.Images.imageableId = Spot.id AND ${process.env.SCHEMA}.Images.imageableType = 'SpotImage' AND ${process.env.SCHEMA}.Images.preview = 1 LIMIT 1)`
   }
-
+//loop through reviews, find preview image of spot, add it to reviews.spot.previewImage
   const reviews = await Review.findAll({
     where:{
       userId: user.id
@@ -123,8 +123,12 @@ router.delete('/:reviewId', requireAuth, handleValidationErrors, async (req, res
     const {user} = req
     const review = await Review.findByPk(req.params.reviewId)
 
-    if(!review) next(noReview())
-    if(review.userId !== user.id) next(userNotAuth())
+    if(!review) {
+      return next(noReview())
+    }
+    if(review.userId !== user.id) {
+      return next(userNotAuth())
+    }
 
     await review.destroy()
 
