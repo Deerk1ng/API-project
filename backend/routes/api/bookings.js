@@ -1,6 +1,6 @@
 const express = require('express')
 
-const { Booking, Spot, sequelize } = require('../../db/models')
+const { Booking, Spot, Image, sequelize } = require('../../db/models')
 const {requireAuth} = require('../../utils/auth')
 const { handleValidationErrors } = require('../../utils/validation');
 
@@ -46,14 +46,46 @@ router.get('/current', requireAuth, async (req,res,next) => {
                 'lng',
                 'name',
                 'price',
-                [sequelize.literal(sqlLit), 'previewImage']
               ],
         },
         attributes: {
             include: ['id']
         }
     })
-    return res.json({Bookings: bookings})
+
+    const prevImages = await Image.findAll({
+        where: {
+          preview: true,
+          imageableType: 'SpotImage'
+        },
+        attributes: ['imageableId', 'url']
+    })
+    const imageObj = { }
+        prevImages.forEach(image => {
+        imageObj[image.imageableId] = image.url
+    })
+
+    const updatedBookings = bookings.map(el => {
+        let previewImage = null
+        if(imageObj[el.Spot.id]){
+          previewImage = imageObj[el.Spot.id]
+        }
+
+        const newBooking = {
+          id: el.id,
+          spotId: el.spotId,
+          Spot: {...el.Spot.toJSON(), previewImage},
+          userId: el.userId,
+          startDate: el.startDate,
+          endDate: el.endDate,
+          createdAt: el.createdAt,
+          updatedAt: el.updatedAt,
+        }
+
+        return newBooking
+    });
+
+    return res.json({Bookings: updatedBookings})
 })
 
 router.put('/:bookingId', requireAuth, handleValidationErrors, async (req,res,next) => {

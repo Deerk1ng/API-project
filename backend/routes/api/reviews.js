@@ -24,11 +24,6 @@ const userNotAuth = function() {
 router.get('/current', requireAuth, async (req, res) => {
   const { user } = req
 
-  let sqlLit = `(SELECT url FROM Images WHERE Images.imageableId = Spot.id AND Images.imageableType = 'SpotImage' AND Images.preview = 1 LIMIT 1)`
-  if(environment === 'production') {
-    sqlLit = `(SELECT url FROM Images WHERE ${process.env.SCHEMA}.Images.imageableId = Spot.id AND ${process.env.SCHEMA}.Images.imageableType = 'SpotImage' AND ${process.env.SCHEMA}.Images.preview = 1 LIMIT 1)`
-  }
-//loop through reviews, find preview image of spot, add it to reviews.spot.previewImage
   const reviews = await Review.findAll({
     where:{
       userId: user.id
@@ -51,15 +46,7 @@ router.get('/current', requireAuth, async (req, res) => {
           'lng',
           'name',
           'price',
-          [sequelize.literal(sqlLit), 'previewImage']
-        ],
-        include: [{ //relation \"images\" does not exist
-          model: Image,
-          where: {
-            preview: true
-          },
-          attributes: []
-        }]
+        ]
       },
       {
         model: Image,
@@ -69,7 +56,42 @@ router.get('/current', requireAuth, async (req, res) => {
     ],
   })
 
-  return res.json({Reviews: reviews})
+  const prevImages = await Image.findAll({
+    where: {
+      preview: true,
+      imageableType: 'SpotImage'
+    },
+    attributes: ['imageableId', 'url']
+  })
+
+  const imageObj = { }
+  prevImages.forEach(image => {
+    imageObj[image.imageableId] = image.url
+  })
+
+  const updatedReviews = reviews.map(el => {
+    let previewImage = null
+    if(imageObj[el.Spot.id]){
+      previewImage = imageObj[el.Spot.id]
+    }
+
+    const newReview = {
+      id: el.id,
+      userId: el.userId,
+      spotId: el.spotId,
+      review: el.review,
+      stars: el.stars,
+      createdAt: el.createdAt,
+      updatedAt: el.updatedAt,
+      User: el.User,
+      Spot: {...el.Spot.toJSON(), previewImage},
+      ReviewImages: el.ReviewImages
+    }
+
+    return newReview
+  });
+
+  return res.json({Reviews: updatedReviews})
 })
 
 router.post('/:reviewId/images', requireAuth, async (req, res, next) => {
