@@ -133,7 +133,6 @@ router.put('/:bookingId', requireAuth, handleValidationErrors, async (req,res,ne
             })
         return res.json(booking)
     } else {
-        // if(start || end){
             const err = new Error("Booking conflict");
             err.status = 403;
             err.message = "Sorry, this spot is already booked for the specified dates";
