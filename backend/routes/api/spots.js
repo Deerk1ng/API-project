@@ -90,32 +90,58 @@ router.get('/', async (req, res, next) => {
         }
     }
 
-
+    console.log("limit: ", limit, "offset: ", offset)
     const spots = await Spot.findAll({
         where,
-        attributes: { //as an object + includes will show all original keys and also add whatever is under includes
-            include: [
-                [sequelize.col('url'), 'previewImage'], //finds Image.url and displays under key previewImage
-                [sequelize.fn('AVG', sequelize.col('Reviews.stars')), 'avgRating'] //gets AVG under the name of avgRating
-            ],
-        },
-        include: [
-            {
-                model: Image,
-                attributes: []
-            },
-            {
-                model: Review,
-                attributes: []
-            }
-        ],
         limit,
         offset,
-        subQuery: false,
-        group: ['Spot.id', 'Images.url'], // splits AVG function and keeps it from averaging all reviews
-})
 
-    return res.json({Spots: spots, page, size})
+    })
+
+    const prevImages = await Image.findAll({
+        where: {
+          preview: true,
+          imageableType: 'SpotImage'
+        },
+        attributes: ['imageableId', 'url']
+      })
+
+      const imageObj = { }
+      prevImages.forEach(image => {
+        imageObj[image.imageableId] = image.url
+      })
+
+    const reviews = await Review.findAll({
+        attributes: ['spotId', 'stars']
+    })
+
+
+
+    const updatedSpots = spots.map(el => {
+        let previewImage = null
+        if(imageObj[el.id]){
+            previewImage = imageObj[el.id]
+        }
+
+        let sum = 0
+        let count = 0
+        reviews.forEach(review => {
+            if (review.spotId == el.id){
+                sum+=review.stars,
+                count ++;
+            }
+        })
+
+        const newSpot = {
+            ...el.toJSON(),
+            avgRating: sum/count,
+            previewImage,
+        }
+
+        return newSpot
+    })
+
+    return res.json({Spots: updatedSpots})
 })
 
 router.get('/current', requireAuth, async (req, res, next) => {
