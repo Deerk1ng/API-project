@@ -16,7 +16,7 @@ const noBooking = function () {
 
 const userNotAuth = function() {
     const err = new Error("User is not Authorized to edit this booking");
-    err.status = 401;
+    err.status = 403;
     err.message = "Booking must belong to the current user";
     return err;
 }
@@ -158,7 +158,7 @@ router.delete('/:bookingId', requireAuth, async (req,res,next) => {
     const spot = await Spot.findByPk(booking.spotId)
     if(booking.userId !== user.id && user.id !== spot.ownerId){
         const err = new Error("User is not Authorized to edit this booking");
-        err.status = 401;
+        err.status = 403;
         err.message = "Booking must belong to the current user or the Spot must belong to the current user";
         return next(err)
     }

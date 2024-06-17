@@ -26,7 +26,7 @@ router.use('/bookings', bookingsRouter);
 
 const userNotAuth = function() {
   const err = new Error("User is not Authorized to edit this spot");
-  err.status = 401;
+  err.status = 3;
   err.message = "Spot must belong to the current user";
   return next(err);
 }
@@ -53,7 +53,7 @@ router.delete('/spot-images/:imageId', requireAuth, async (req, res, next) => {
 
   if(user.id !== image.Spot.ownerId){
     const err = new Error("User is not Authorized to edit this spot");
-    err.status = 401;
+    err.status = 403;
     err.message = "Spot must belong to the current user";
     return next(err);
   }
@@ -87,7 +87,7 @@ router.delete('/review-images/:imageId', requireAuth, async (req, res, next) => 
 
   if(user.id !== image.Review.userId){
     const err = new Error("User is not Authorized to edit this spot");
-    err.status = 401;
+    err.status = 403;
     err.message = "Review must belong to the current user";
     return next(err);
   } else {

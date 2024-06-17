@@ -14,7 +14,7 @@ const noSpot = function () {
   }
 const userNotAuth = function() {
     const err = new Error("User is not Authorized to edit this spot");
-    err.status = 401;
+    err.status = 403;
     err.message = "Spot must belong to the current user";
     return err;
 }
