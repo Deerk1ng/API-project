@@ -100,9 +100,9 @@ router.delete('/review-images/:imageId', requireAuth, async (req, res, next) => 
 })
 
 
-router.post('/test', function(req, res) {
-    return res.json({ requestBody: req.body });
-  });
+// router.post('/test', function(req, res) {
+//     return res.json({ requestBody: req.body });
+//   });
 
 
 
