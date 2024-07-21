@@ -17,7 +17,6 @@ if (process.env.NODE_ENV !== 'production') {
     });
   }
 
-const apiRouter = require('./api');
 
 router.use('/api', apiRouter);
 
