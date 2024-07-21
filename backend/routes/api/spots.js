@@ -90,7 +90,6 @@ router.get('/', async (req, res, next) => {
         }
     }
 
-    console.log("limit: ", limit, "offset: ", offset)
     const spots = await Spot.findAll({
         where,
         limit,
@@ -343,7 +342,6 @@ router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
             startDate,
             endDate
         })
-        console.log(newBooking.toJSON())
         res.status(201)
         return res.json(newBooking.toJSON())
     } else {
@@ -447,7 +445,6 @@ router.post('/:spotId/reviews', requireAuth, handleValidationErrors, async (req,
     })
 
     if(checkUserReview){
-        console.log("CURRENT USER", user, user.id, checkUserReview)
         const err = new Error("User already reviewed this spot");
         err.status = 500;
         err.message = "User already has a review for this spot";
