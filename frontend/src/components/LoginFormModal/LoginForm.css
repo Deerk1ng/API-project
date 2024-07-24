@@ -1,0 +1,10 @@
+.login-form {
+    display: flexbox;
+
+}
+
+.login-credentials {
+    margin: 10px;
+    display: flexbox;
+    flex-direction: column;
+}

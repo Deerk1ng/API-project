@@ -16,7 +16,7 @@ const noReview = function () {
 
 const userNotAuth = function() {
     const err = new Error("User is not Authorized to edit this review");
-    err.status = 401;
+    err.status = 403;
     err.message = "Review must belong to the current user";
     return err;
 }
