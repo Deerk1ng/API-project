@@ -1,7 +1,7 @@
 'use strict';
 
 const data = [{
-  "url": "image url",
+  "url": "https://cdn.prod.website-files.com/660332e04a42ee42011d9a22/660332e04a42ee42011d9b86_Artboard%201%20copy-100.webp",
   "preview": true,
   "imageableType": 'SpotImage',
   "imageableId" : 1
@@ -16,11 +16,35 @@ const data = [{
   "imageableType": 'SpotImage',
   "imageableId" : 1
 },{
-  "url": "image url 2",
+  "url": "https://media.timeout.com/images/105777074/750/422/image.jpg",
   "preview": true,
   "imageableType": 'SpotImage',
   "imageableId" : 2
 },
+{
+  "url": "https://media.timeout.com/images/105777074/750/422/image.jpg",
+  "preview": true,
+  "imageableType": 'SpotImage',
+  "imageableId" : 3
+},
+{
+  "url": "https://media.timeout.com/images/105777074/750/422/image.jpg",
+  "preview": true,
+  "imageableType": 'SpotImage',
+  "imageableId" : 4
+},
+{
+  "url": "https://media.timeout.com/images/105777074/750/422/image.jpg",
+  "preview": true,
+  "imageableType": 'SpotImage',
+  "imageableId" : 5
+},
+{
+  "url": "https://media.timeout.com/images/105777074/750/422/image.jpg",
+  "preview": true,
+  "imageableType": 'SpotImage',
+  "imageableId" : 6
+}
 ]
 let options = {};
 if (process.env.NODE_ENV === 'production') {

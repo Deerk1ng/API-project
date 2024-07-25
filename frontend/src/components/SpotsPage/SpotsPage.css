@@ -1,0 +1,34 @@
+.spots-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.spot-card {
+    width: 23%;
+    margin: 0.5%;
+    flex-wrap: wrap;
+
+}
+
+.prevImg {
+    display: block;
+    width: 300px;
+    height: 300px;
+    border-radius: 5px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.spot-preview {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    padding: 0px 50px;
+}
+
+.spot-price {
+    padding: 0px 50px;
+}
