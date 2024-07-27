@@ -30,7 +30,7 @@ function LoginFormModal() {
   const DemoSignIn = (e) => {
     setCredential("Demo-lition")
     setPassword("password")
-    .then(handleSubmit(e))
+    return handleSubmit(e)
   }
 
   return (
