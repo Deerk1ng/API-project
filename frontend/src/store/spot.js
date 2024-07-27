@@ -1,4 +1,8 @@
+import { csrfFetch } from './csrf.js'
+
 const GET_SPOT = "spots/getAllSpots"
+const ADD_SPOT = 'spots/createSpot'
+const ADD_IMG = 'spots/addImage'
 // const SINGLE_SPOT = '/spots/getSingleSpot'
 
 //action creators
@@ -9,10 +13,22 @@ const loadSpots = (spots) => {
     }
 }
 
+const addSpot = (spot) => {
+    return {
+        type: ADD_SPOT,
+        spot
+    }
+}
 
+const addImage = (url) => {
+    return {
+        type: ADD_IMG,
+        url
+    }
+}
 //thunks
 export const getAllSpots = () => async (dispatch) => {
-    const response = await fetch('/api/spots')
+    const response = await csrfFetch('/api/spots')
 
     if(response.ok) {
         const data = await response.json()
@@ -21,6 +37,47 @@ export const getAllSpots = () => async (dispatch) => {
     }
 }
 
+export const createSingleSpot = (spot) => async (dispatch) => {
+    const {address, city, state, country, lat, lng, name, description, price,} = spot
+    const response = await csrfFetch('/api/spots', {
+        method: 'POST',
+        body: JSON.stringify({
+            address,
+            city,
+            state,
+            country,
+            lat,
+            lng,
+            name,
+            description,
+            price,
+        })
+    })
+
+    const data = await response.json();
+    if(response.ok) {
+        dispatch(addSpot(data))
+        return data
+    } else {
+        return data.errors
+    }
+}
+
+export const uploadImage = (id, img) => async (dispatch) => {
+    const {url, preview} = img
+    const response = await csrfFetch(`/api/spots/${id}/images`,{
+        method: 'POST',
+        body: JSON.stringify({
+            url,
+            preview
+        })
+    })
+
+    const data = await response.json()
+    if(!response.ok) {
+        return data.errors
+    }
+}
 
 //state object
 
@@ -33,6 +90,11 @@ const spotsReducer = (state = initialState, action) => {
             const newState = {};
             action.spots?.Spots.forEach((spot) => newState[spot.id] = spot);
             return newState;
+        }
+        case ADD_SPOT: {
+            const newState = {...state}
+            newState[action.spot.id] = action.spot
+            return newState
         }
         default:
             return state;

@@ -51,5 +51,13 @@
 }
 
 .profile-dropdown > li {
-    padding: 3px 0px;
+    padding: 5px 0px;
+}
+
+.manage-spots {
+    cursor: pointer;
+    border-top: 1px solid #cccccc;
+    border-bottom: 1px solid #cccccc;
+    margin: 5px 0px;
+
 }

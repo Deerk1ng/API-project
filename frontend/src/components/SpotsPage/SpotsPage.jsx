@@ -2,7 +2,7 @@ import './SpotsPage.css'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import * as spotActions from '../../store/spot'
-import Spots from './Spots';
+import Spots from '../Spots/Spots';
 
 
 const SpotsPage = () => {
@@ -16,7 +16,7 @@ const SpotsPage = () => {
 
     return (
         <div className='spots-container'>
-            {spotList?.map((spot) => <Spots key={spot.id} spots={spot} />)}
+            {spotList?.map((spot) => <Spots key={spot.id} spots={spot} isCurrent={'false'} />)}
         </div>
     )
 }
