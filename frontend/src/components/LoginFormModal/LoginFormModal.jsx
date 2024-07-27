@@ -27,10 +27,9 @@ function LoginFormModal() {
       });
   };
 
-  const DemoSignIn = (e) => {
-    setCredential("Demo-lition")
-    setPassword("password")
-    .then(handleSubmit(e))
+  const DemoSignIn = () => {
+    return dispatch(sessionActions.login({ credential: "Demo-lition", password: "password" }))
+      .then(closeModal)
   }
 
   return (

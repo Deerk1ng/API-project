@@ -1,11 +1,9 @@
+import './UpdateSpot.css'
 import { useState } from 'react'
-import './CreateSpot.css'
 import { useDispatch} from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import * as spotActions from '../../store/spot'
 
-
-const CreateSpot = () => {
+const UpdateSpot = () => {
     const [country, setCountry] = useState('')
     const [address, setAddress] = useState('')
     const [city, setCity] = useState('')
@@ -13,49 +11,15 @@ const CreateSpot = () => {
     const [description, setDescription] = useState('')
     const [name, setName] = useState('')
     const [price, setPrice] = useState('')
-    const [previewImage, setPreviewImage] = useState('')
-    const [photo1, setPhoto1] = useState('')
-    const [photo2, setPhoto2] = useState('')
-    const [photo3, setPhoto3] = useState('')
-    const [photo4, setPhoto4] = useState('')
-    const [errors, setErrors] = useState({});
     //get user somehow, add firstname, lastname, id to create spot
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        setErrors({})
-
-        const photoArr = [photo1, photo2, photo3, photo4]
-        const newSpot = {
-            address,
-            city,
-            state,
-            country,
-            lat: '50',
-            lng: '50',
-            name,
-            description,
-            price,
-        }
-
-        dispatch(spotActions.createSingleSpot(newSpot))
-            .then(data => {
-                if(data && data.errors){
-                    setErrors(data.errors)
-                } else {
-                    dispatch(spotActions.uploadImage(data.id, {url: previewImage, preview: true}))
-                    photoArr.forEach(url => url? dispatch(spotActions.uploadImage(data.id, {url: url, preview: false})): url)
-                    navigate(`/spots/${data.id}`)
-                }
-            })
-    }
 
     return (
         <>
-        <form className='create-spot' onSubmit={handleSubmit}>
+        <form className='create-spot' >
             <h1>Create a New Spot</h1>
             <h2>Where is your place located?</h2>
             <div>Guests will only get your exact address once they booked a reservation.</div>
@@ -130,46 +94,12 @@ const CreateSpot = () => {
                         onChange={(e) => setPrice(e.target.value)}
                         />
                 </label>
-                <hr />
 
-                <h2>Liven up your spot with photos</h2>
-                <div>Submit a link to at least one photo to publish your spot.</div>
-                <input
-                    type="text"
-                    value={previewImage}
-                    onChange={e => setPreviewImage(e.target.value)}
-                    placeholder='Preview Image URL'
-                />
-                <input
-                    type="text"
-                    value={photo1}
-                    onChange={e => setPhoto1(e.target.value)}
-                    placeholder='Image URL'
-                />
-                <input
-                    type="text"
-                    value={photo2}
-                    onChange={e => setPhoto2(e.target.value)}
-                    placeholder='Image URL'
-                />
-                <input
-                    type="text"
-                    value={photo3}
-                    onChange={e => setPhoto3(e.target.value)}
-                    placeholder='Image URL'
-                />
-                <input
-                    type="text"
-                    value={photo4}
-                    onChange={e => setPhoto4(e.target.value)}
-                    placeholder='Image URL'
-                />
-                <hr />
-                <button type="submit">Create Spot</button>
+                <button type="submit">Update Spot</button>
 
             </form>
         </>
     )
 }
 
-export default CreateSpot
+export default UpdateSpot
