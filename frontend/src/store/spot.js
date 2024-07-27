@@ -1,5 +1,5 @@
 const GET_SPOT = "spots/getAllSpots"
-const SINGLE_SPOT = '/spots/getSingleSpot'
+// const SINGLE_SPOT = '/spots/getSingleSpot'
 
 //action creators
 const loadSpots = (spots) => {

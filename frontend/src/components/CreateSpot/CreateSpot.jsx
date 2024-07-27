@@ -31,7 +31,7 @@ const CreateSpot = () => {
             price,
             previewImage
         }
-
+        return newSpot
     }
 
     return (
@@ -93,7 +93,7 @@ const CreateSpot = () => {
                 <hr />
 
                 <h2>Create a title for your spot</h2>
-                <div>Catch guests' attention with a spot title that highlights what makes your place special</div>
+                <div>Catch guests attention with a spot title that highlights what makes your place special</div>
                 <input
                     type="text"
                     value={name}
