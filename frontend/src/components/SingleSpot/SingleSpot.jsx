@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 
 const SingleSpot = () => {
     const { spotId } = useParams();
-    // const singleSpot = useSelector((state) => state.spot[spotId])
     const [spot, setSpot] = useState({})
 
     useEffect(() =>  {

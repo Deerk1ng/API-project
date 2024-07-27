@@ -8,3 +8,21 @@
     display: flexbox;
     flex-direction: column;
 }
+
+.error-login {
+    color: red;
+}
+
+.demo-user-signup {
+    color: #5985E1;
+    text-decoration: underline;
+}
+
+.login-form{
+    display: flex;
+    flex-direction: column;
+}
+
+.login-form > * {
+    padding: 10px 5px;
+}
