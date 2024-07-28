@@ -1,15 +1,15 @@
 import './Spots.css'
 import { FaStar } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
-
+import OpenModalButton from '../OpenModalButton/OpenModalButton'
+import DeleteSpotModal from '../DeleteSpotModal/DeleteSpotModal'
 
 
 const Spots = (spot) => {
     const navigate = useNavigate();
-    console.log(spot.isCurrent)
     const isCurrent = spot.isCurrent
-    console.log(isCurrent)
     spot = spot.spots
+
     return (
         <div className='curr-container'>
         <div title={spot.name} className="spot-card" onClick={() => navigate(`/spots/${spot.id}`)}>
@@ -23,7 +23,11 @@ const Spots = (spot) => {
             {isCurrent == true ? (
                 <span className='button-container'>
                     <button className='newSpot-button' onClick={() => navigate(`/spots/${spot.id}/edit`)}>Update</button>
-                    <button className='newSpot-button' >Delete</button>
+                    <OpenModalButton
+                    buttonText="Delete"
+                    className='newSpot-button'
+                    modalComponent={<DeleteSpotModal id={spot.id}/>}
+                    />
                 </span>
             ) : (<></>)}
         </div>

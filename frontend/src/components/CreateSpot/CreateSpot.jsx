@@ -29,6 +29,7 @@ const CreateSpot = () => {
         setErrors({})
 
         const photoArr = [photo1, photo2, photo3, photo4]
+
         const newSpot = {
             address,
             city,
@@ -42,15 +43,15 @@ const CreateSpot = () => {
         }
 
         dispatch(spotActions.createSingleSpot(newSpot))
-            .then(data => {
-                if(data && data.errors){
-                    setErrors(data.errors)
-                } else {
-                    dispatch(spotActions.uploadImage(data.id, {url: previewImage, preview: true}))
-                    photoArr.forEach(url => url? dispatch(spotActions.uploadImage(data.id, {url: url, preview: false})): url)
-                    navigate(`/spots/${data.id}`)
-                }
-            })
+        .then(data => {
+                dispatch(spotActions.uploadImage(data.id, {url: previewImage, preview: true}))
+                photoArr.forEach(url => url? dispatch(spotActions.uploadImage(data.id, {url: url, preview: false})): url)
+                navigate(`/spots/${data.id}`)
+        }).catch(async (err) => {
+            const newErrs = await err.json()
+            setErrors({ ...errors, ...newErrs.errors})
+
+        })
     }
 
     return (
@@ -61,6 +62,7 @@ const CreateSpot = () => {
             <div>Guests will only get your exact address once they booked a reservation.</div>
                 <label>
                     Country
+                    {errors.country ? <span className='err'>{errors.country}</span> : <></>}
                     <input
                         type="text"
                         value={country}
@@ -70,6 +72,7 @@ const CreateSpot = () => {
                 </label>
                 <label>
                     Street Address
+                    {errors.address ? <span className='err'>{errors.address}</span> : <></>}
                     <input
                         type="text"
                         value={address}
@@ -80,16 +83,17 @@ const CreateSpot = () => {
                 <div>
                     <label>
                         City
+                    {errors.city ? <span className='err'>{errors.city}</span> : <></>}
                         <input
                             type="text"
                             value={city}
                             placeholder="City"
-
                             onChange={(e) => setCity(e.target.value)}
                         />
                     </label>
                     <label>
                         State
+                        {errors.state ? <span className='err'>{errors.state}</span> : <></>}
                         <input
                             type="text"
                             placeholder="State"
@@ -108,6 +112,7 @@ const CreateSpot = () => {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                 />
+                {errors.description ? <span className='err'>{errors.description}</span> : <></>}
                 <hr />
 
                 <h2>Create a title for your spot</h2>
@@ -118,6 +123,7 @@ const CreateSpot = () => {
                     onChange={e => setName(e.target.value)}
                     placeholder='Name of your spot'
                 />
+                {errors.name ? <span className='err'>Name is required</span> : <></>}
 
                 <h2>Sert a base price for your spot</h2>
                 <div>Comnpetitive pricing can help your listing stand out and rank higher in search results</div>
@@ -129,6 +135,8 @@ const CreateSpot = () => {
                         value={price}
                         onChange={(e) => setPrice(e.target.value)}
                         />
+                        {errors.price ? <span className='err'>{errors.price}</span> : <></>}
+
                 </label>
                 <hr />
 

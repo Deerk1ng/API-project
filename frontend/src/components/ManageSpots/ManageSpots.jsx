@@ -14,7 +14,7 @@ const ManageSpots = () => {
             setSpots(data.Spots)
         }
         getCurrentSpots()
-    }, [])
+    }, [spots])
 
     return (
         <>

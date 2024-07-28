@@ -127,11 +127,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notNull: {
-          msg: "Description is required"
+          msg: "Description needs a minimum of 30 characters"
         },
         isEmpty(value){
-          if(!value){
-            throw new Error("Description is required")
+          if(!value || value.length < 30){
+            throw new Error("Description needs a minimum of 30 characters")
           }
         }
       }
@@ -140,7 +140,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.FLOAT,
       allowNull: false,
       validate: {
-        min: {args: 1, msg: "Price per day is required"}
+        min: {args: 1, msg: "Price per day is required"},
+        isEmpty(value){
+          if(!value){
+            throw new Error("Price per day is required")
+          }
+        }
       }
     },
   }, {

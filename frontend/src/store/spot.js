@@ -2,8 +2,7 @@ import { csrfFetch } from './csrf.js'
 
 const GET_SPOT = "spots/getAllSpots"
 const ADD_SPOT = 'spots/createSpot'
-const ADD_IMG = 'spots/addImage'
-// const SINGLE_SPOT = '/spots/getSingleSpot'
+const DELETE_SPOT = 'spots/deleteSpot'
 
 //action creators
 const loadSpots = (spots) => {
@@ -20,12 +19,13 @@ const addSpot = (spot) => {
     }
 }
 
-const addImage = (url) => {
+const removeSpot = (id) => {
     return {
-        type: ADD_IMG,
-        url
+        type: DELETE_SPOT,
+        id
     }
 }
+
 //thunks
 export const getAllSpots = () => async (dispatch) => {
     const response = await csrfFetch('/api/spots')
@@ -63,7 +63,7 @@ export const createSingleSpot = (spot) => async (dispatch) => {
     }
 }
 
-export const uploadImage = (id, img) => async (dispatch) => {
+export const uploadImage = (id, img) => async () => {
     const {url, preview} = img
     const response = await csrfFetch(`/api/spots/${id}/images`,{
         method: 'POST',
@@ -76,6 +76,43 @@ export const uploadImage = (id, img) => async (dispatch) => {
     const data = await response.json()
     if(!response.ok) {
         return data.errors
+    }
+}
+
+export const updateSpot = (spot) => async (dispatch) => {
+    const {id, address, city, state, country, lat, lng, name, description, price,} = spot
+    const response = await csrfFetch(`/api/spots/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+            address,
+            city,
+            state,
+            country,
+            lat,
+            lng,
+            name,
+            description,
+            price,
+        })
+    })
+
+    const data = await response.json();
+    if(response.ok) {
+        dispatch(addSpot(data, spot.id))
+        return data
+    } else {
+        return data.errors
+    }
+}
+
+export const deleteSpot = (id) => async (dispatch) => {
+    const response = await csrfFetch(`/api/spots/${id}`, {
+        method: 'DELETE'
+    })
+
+    if(response.ok){
+        dispatch(removeSpot(id))
+        return response
     }
 }
 
@@ -94,6 +131,11 @@ const spotsReducer = (state = initialState, action) => {
         case ADD_SPOT: {
             const newState = {...state}
             newState[action.spot.id] = action.spot
+            return newState
+        }
+        case DELETE_SPOT: {
+            const newState = {...state}
+            delete newState[action.id]
             return newState
         }
         default:
