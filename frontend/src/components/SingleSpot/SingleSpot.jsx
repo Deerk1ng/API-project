@@ -1,6 +1,8 @@
 import { useParams } from 'react-router-dom'
 import './SingleSpot.css'
 import { useEffect, useState } from 'react';
+import { FaStar } from "react-icons/fa";
+
 
 const SingleSpot = () => {
     const { spotId } = useParams();
@@ -18,31 +20,41 @@ const SingleSpot = () => {
         getSingleSpot()
     }, [spotId])
 
+
+    const imgLoop = (spotArr) => {
+        const newImgArr = []
+        for(let i = 0; i < 5; i++){
+            const currImg = spotArr[i]
+            const imgClassName = `spot-img` + (currImg.preview ? ' preview' : ` photo${i}`)
+            newImgArr.push(<img key={currImg.id}  src={currImg.url} alt={`image belonging to the spot ${spot.name}`} className={imgClassName} />)
+        }
+        return newImgArr
+    }
+
     return (
         <div className='spot-article'>
             <h1 className='spot-title'>{spot?.name}</h1>
             <div className='spot-location'>{spot?.city} , {spot?.state} , {spot?.country}</div>
-            <div>
-                {spot?.SpotImages?.map(image => <img key={image.id}  src={image.url} alt={`image ${image.id} belonging to the spot ${spot.name}`}/>  )}
+            <div className='img-cont'>
+                {spot.SpotImages ? imgLoop(spot.SpotImages) : <></>}
             </div>
-            <h2 className='spot-host'>Hosted by {spot?.Owner?.firstName} {spot?.Owner?.lastName}</h2>
-            <div className='spot-desc'>{spot?.description}</div>
-            <div>
-                <div className='spot-price'>
-                    <span>{spot?.price}</span> <span>night</span>
+            <div className='cont'>
+                <div className='disc-container'>
+                    <h2 className='spot-host'>Hosted by {spot?.Owner?.firstName} {spot?.Owner?.lastName}</h2>
+                    <div className='spot-desc'>{spot?.description}</div>
                 </div>
-                <div className='reserve-box'>
-                    <div>{spot?.avgStarRating}</div>
-                    <div>{spot?.numReviews}</div>
+                <div className='reserve-cont'>
+                    <div className='reserve-box'>
+                        <div>$<span className='spot-price'>{spot?.price}</span> night</div>
+                        <div><FaStar /> {spot?.avgStarRating > 0 ? spot?.avgStarRating + ' | ': ''} {spot?.numReviews > 0 ? spot?.numReviews + ' review(s)' : 'New'}</div>
+                    </div>
                     <button className='reserve-button'>Reserve</button>
                 </div>
             </div>
-
             <hr width='auto'/>
 
             <div className='spot-reviews'>
-                <span>{spot.avgStarRating} </span>
-                <span>{spot.numReviews}</span>
+                <h2><FaStar /> {spot?.avgStarRating > 0 ? spot?.avgStarRating.toFixed(2) + ' | ': ''} {spot?.numReviews > 0 ? spot?.numReviews + ' review(s)' : 'New'}</h2>
                 {/* map reviews here */}
             </div>
         </div>
