@@ -19,7 +19,7 @@ const ManageSpots = () => {
     return (
         <>
             <div className='header-container'>
-                <h1>Manage Your Spots</h1>
+                <h1>Manage Spots</h1>
                 <button className='curr-button' onClick={() => navigate('/spots/new')} >Create a New Spot</button>
             </div>
             <div className='spots-container'>

@@ -1,0 +1,67 @@
+.err {
+    color: red;
+    display: flex;
+}
+.label-err{
+    display: flex;
+    flex-direction: row;
+}
+.label {
+    font-weight: bolder;
+    margin-right: 20px;
+}
+.create-spot {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 550px;
+    margin: auto;
+}
+
+.input {
+    width: 550px;
+}
+.city {
+    width: 300px
+}
+
+.city-state {
+    display: flex;
+    justify-content: space-between;
+}
+
+label {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+.comma {
+    font-size: large;
+    font-weight: bolder;
+    margin-left: 5px;
+}
+
+input {
+    margin: 5px 0px;
+}
+
+.subheading {
+    margin: 3px 0px;
+
+}
+
+.desc-head {
+    margin-bottom: 10px;
+}
+
+.form-sec {
+    border-bottom: 2px solid #cccccc;
+    padding: 10px 0px;
+}
+
+.price {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}

@@ -24,9 +24,9 @@ const CreateSpot = () => {
     const navigate = useNavigate()
 
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        setErrors({})
+        setErrors({previewImage: 'Preview image is required'})
 
         const photoArr = [photo1, photo2, photo3, photo4]
 
@@ -49,21 +49,24 @@ const CreateSpot = () => {
                 navigate(`/spots/${data.id}`)
         }).catch(async (err) => {
             const newErrs = await err.json()
-            setErrors({ ...errors, ...newErrs.errors})
-
+            setErrors(newErrs.errors)
         })
     }
 
     return (
         <>
         <form className='create-spot' onSubmit={handleSubmit}>
-            <h1>Create a New Spot</h1>
-            <h2>Where is your place located?</h2>
-            <div>Guests will only get your exact address once they booked a reservation.</div>
+            <h1 >Create a New Spot</h1>
+            <div className='form-sec'>
+            <h2 className='subheading'>Where is your place located?</h2>
+            <div className='desc-head'>Guests will only get your exact address once they booked a reservation.</div>
                 <label>
-                    Country
-                    {errors.country ? <span className='err'>{errors.country}</span> : <></>}
+                    <div className='label-err'>
+                        <span className='label'>Country</span>
+                        {errors.country ? <span className='err'>{errors.country}</span> : <></>}
+                    </div>
                     <input
+                        className='input'
                         type="text"
                         value={country}
                         placeholder="Country"
@@ -71,30 +74,42 @@ const CreateSpot = () => {
                     />
                 </label>
                 <label>
-                    Street Address
-                    {errors.address ? <span className='err'>{errors.address}</span> : <></>}
+                    <div className='label-err'>
+                        <span className='label'>Street Address</span>
+                        {errors.address ? <span className='err'>{errors.address}</span> : <></>}
+                    </div>
                     <input
+                        className='input'
                         type="text"
                         value={address}
                         placeholder="Street Address"
                         onChange={(e) => setAddress(e.target.value)}
                     />
                 </label>
-                <div>
+                <div className='input city-state'>
                     <label>
-                        City
-                    {errors.city ? <span className='err'>{errors.city}</span> : <></>}
-                        <input
-                            type="text"
-                            value={city}
-                            placeholder="City"
-                            onChange={(e) => setCity(e.target.value)}
-                        />
+                        <div className='label-err'>
+                        <span className='label'>City</span>
+                            {errors.city ? <span className='err'>{errors.city}</span> : <></>}
+                        </div>
+                        <div>
+                            <input
+                                className='city'
+                                type="text"
+                                value={city}
+                                placeholder="City"
+                                onChange={(e) => setCity(e.target.value)}
+                            />
+                            <span className='comma'>  ,</span>
+                        </div>
                     </label>
                     <label>
-                        State
-                        {errors.state ? <span className='err'>{errors.state}</span> : <></>}
+                        <div className='label-err'>
+                        <span className='label'>State</span>
+                            {errors.state ? <span className='err'>{errors.state}</span> : <></>}
+                        </div>
                         <input
+                            className='state'
                             type="text"
                             placeholder="State"
                             value={state}
@@ -102,77 +117,95 @@ const CreateSpot = () => {
                         />
                     </label>
                 </div>
-                <hr />
+            </div>
 
-                <h2>Describe your place to guests</h2>
-                <div>Mention the best features of your space, any special amentities like fast wifi or parking, and what you love about the neighborhood</div>
-                <input
-                    type="text"
+            <div className='form-sec' >
+                <h2 className='subheading'>Describe your place to guests</h2>
+                <div className='desc-head'>Mention the best features of your space, any special amentities like fast wifi or parking, and what you love about the neighborhood</div>
+                <textarea
+                    className='input desc'
                     placeholder='Please write at least 30 characters'
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                 />
                 {errors.description ? <span className='err'>{errors.description}</span> : <></>}
-                <hr />
 
-                <h2>Create a title for your spot</h2>
-                <div>Catch guests attention with a spot title that highlights what makes your place special</div>
+            </div>
+            <div className='form-sec'>
+                <h2 className='subheading'>Create a title for your spot</h2>
+                <div className='desc-head'>Catch guests attention with a spot title that highlights what makes your place special</div>
                 <input
+                    className='input'
                     type="text"
                     value={name}
                     onChange={e => setName(e.target.value)}
                     placeholder='Name of your spot'
                 />
                 {errors.name ? <span className='err'>Name is required</span> : <></>}
-
-                <h2>Sert a base price for your spot</h2>
-                <div>Comnpetitive pricing can help your listing stand out and rank higher in search results</div>
+            </div>
+            <div className='form-sec'>
+                 <h2 className='subheading'>Sert a base price for your spot</h2>
+                <div className='desc-head'>Comnpetitive pricing can help your listing stand out and rank higher in search results</div>
                 <label>
-                    $
+                    <div className='price'>
+                    <span className='label'>$</span>
                     <input
+                        className='input'
                         type="number"
                         placeholder="Price per night USD"
                         value={price}
                         onChange={(e) => setPrice(e.target.value)}
                         />
+                    </div>
                         {errors.price ? <span className='err'>{errors.price}</span> : <></>}
 
                 </label>
-                <hr />
-
-                <h2>Liven up your spot with photos</h2>
-                <div>Submit a link to at least one photo to publish your spot.</div>
+            </div>
+            <div className='form-sec'>
+                 <h2 className='subheading'>Liven up your spot with photos</h2>
+                <div className='desc-head'>Submit a link to at least one photo to publish your spot.</div>
                 <input
+                    className='input'
                     type="text"
                     value={previewImage}
                     onChange={e => setPreviewImage(e.target.value)}
                     placeholder='Preview Image URL'
                 />
+                {errors.previewImage ? <span className='err'>{errors.previewImage}</span> : <></>}
+                {errors.image ? <span className='err'>{errors.image}</span> : <></>}
                 <input
+                    className='input'
                     type="text"
                     value={photo1}
                     onChange={e => setPhoto1(e.target.value)}
                     placeholder='Image URL'
                 />
+                {errors.image ? <span className='err'>{errors.image}</span> : <></>}
                 <input
+                    className='input'
                     type="text"
                     value={photo2}
                     onChange={e => setPhoto2(e.target.value)}
                     placeholder='Image URL'
                 />
+                {errors.image ? <span className='err'>{errors.image}</span> : <></>}
                 <input
+                    className='input'
                     type="text"
                     value={photo3}
                     onChange={e => setPhoto3(e.target.value)}
                     placeholder='Image URL'
                 />
+                {errors.image ? <span className='err'>{errors.image}</span> : <></>}
                 <input
+                    className='input'
                     type="text"
                     value={photo4}
                     onChange={e => setPhoto4(e.target.value)}
                     placeholder='Image URL'
                 />
-                <hr />
+                {errors.image ? <span className='err'>{errors.image}</span> : <></>}
+            </div>
                 <button type="submit">Create Spot</button>
 
             </form>

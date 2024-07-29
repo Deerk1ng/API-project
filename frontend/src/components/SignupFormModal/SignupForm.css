@@ -25,6 +25,7 @@
 #modal-content {
     border-radius: 20px;
     height: auto;
+    width: 75%;
 }
 .login-form {
     display: flexbox;
