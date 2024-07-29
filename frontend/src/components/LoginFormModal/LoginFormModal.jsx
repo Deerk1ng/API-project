@@ -33,8 +33,8 @@ function LoginFormModal() {
   }
 
   return (
-    <div >
-      <h1>Log In</h1>
+    <div className='modal'>
+      <h1 className='login-title'>Log In</h1>
       <form className='login-form' onSubmit={handleSubmit}>
         {errors.credential && (
           <p className='error-login'>{errors.credential}</p>
@@ -43,27 +43,25 @@ function LoginFormModal() {
           <p className='error-login'>{errors.password}</p>
         )}
         {errors.message && (
-          <p className='error-login'>{errors.message}</p>
+          <p className='error-login'>The provided credentials were invalid</p>
         )}
-        <label>
-          Username or Email
           <input
+            className='inputs'
             type="text"
             value={credential}
             onChange={(e) => setCredential(e.target.value)}
+            placeholder='Username or Email'
             required
-          />
-        </label>
-        <label>
-          Password
+            />
           <input
+            className='inputs'
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            placeholder='Password'
             required
-          />
-        </label>
-        <button type="submit">Log In</button>
+            />
+        <button className='submit-button' type="submit" disabled={credential.length < 4 || password.length < 6}>Log In</button>
         <div className='demo-user-signup' onClick={DemoSignIn}>Demo User</div>
       </form>
     </div>

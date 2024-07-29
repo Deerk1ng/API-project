@@ -1,6 +1,22 @@
+.modal {
+    text-align: center;
+    margin: 20px;
+}
+
+.inputs {
+    margin: 10px 0px
+}
+
+.inputs:placeholder-shown {
+    background-color: #c9d3e9;
+}
+
+#modal-content {
+    border-radius: 20px;
+    height: auto;
+}
 .login-form {
     display: flexbox;
-
 }
 
 .login-credentials {
@@ -18,6 +34,9 @@
     text-decoration: underline;
 }
 
+.demo-user-signup:hover {
+    cursor: pointer;
+}
 .login-form{
     display: flex;
     flex-direction: column;
@@ -25,4 +44,17 @@
 
 .login-form > * {
     padding: 10px 5px;
+}
+
+button:disabled {
+    background-color: #cccccc
+}
+
+.submit-button {
+    display: block;
+    width: auto;
+    background-color: #5985E1;
+    border-color: #5985E1;
+    color: #ffffff;
+    padding: 5px;
 }
