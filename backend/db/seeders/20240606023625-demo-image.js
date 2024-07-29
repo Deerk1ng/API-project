@@ -6,12 +6,29 @@ const data = [{
   "imageableType": 'SpotImage',
   "imageableId" : 1
 },{
-  "url": "image url 3",
+  "url": "https://southwickszoo.com/wp-content/uploads/IMG_4245-scaled.jpg",
   "preview": false,
   "imageableType": 'ReviewImage',
   "imageableId" : 1
+},
+{
+  "url": "https://southwickszoo.com/wp-content/uploads/IMG_4245-scaled.jpg",
+  "preview": false,
+  "imageableType": 'SpotImage',
+  "imageableId" : 1
+},
+{
+  "url": "https://southwickszoo.com/wp-content/uploads/IMG_4245-scaled.jpg",
+  "preview": false,
+  "imageableType": 'SpotImage',
+  "imageableId" : 1
 },{
-  "url": "image url 4",
+  "url": "https://southwickszoo.com/wp-content/uploads/IMG_4245-scaled.jpg",
+  "preview": false,
+  "imageableType": 'SpotImage',
+  "imageableId" : 1
+},{
+  "url": "https://southwickszoo.com/wp-content/uploads/IMG_4245-scaled.jpg",
   "preview": false,
   "imageableType": 'SpotImage',
   "imageableId" : 1
@@ -22,8 +39,56 @@ const data = [{
   "imageableId" : 2
 },
 {
+  "url": "https://southwickszoo.com/wp-content/uploads/IMG_4245-scaled.jpg",
+  "preview": false,
+  "imageableType": 'SpotImage',
+  "imageableId" : 2
+},
+{
+  "url": "https://southwickszoo.com/wp-content/uploads/IMG_4245-scaled.jpg",
+  "preview": false,
+  "imageableType": 'SpotImage',
+  "imageableId" : 2
+},
+{
+  "url": "https://southwickszoo.com/wp-content/uploads/IMG_4245-scaled.jpg",
+  "preview": false,
+  "imageableType": 'SpotImage',
+  "imageableId" : 2
+},
+{
+  "url": "https://southwickszoo.com/wp-content/uploads/IMG_4245-scaled.jpg",
+  "preview": false,
+  "imageableType": 'SpotImage',
+  "imageableId" : 2
+},
+{
   "url": "https://media.timeout.com/images/105777074/750/422/image.jpg",
   "preview": true,
+  "imageableType": 'SpotImage',
+  "imageableId" : 3
+},
+{
+  "url": "https://southwickszoo.com/wp-content/uploads/IMG_4245-scaled.jpg",
+  "preview": false,
+  "imageableType": 'SpotImage',
+  "imageableId" : 3
+},
+{
+  "url": "https://southwickszoo.com/wp-content/uploads/IMG_4245-scaled.jpg",
+  "preview": false,
+  "imageableType": 'SpotImage',
+  "imageableId" : 3
+},
+{
+  "url": "https://southwickszoo.com/wp-content/uploads/IMG_4245-scaled.jpg",
+  "preview": false,
+  "imageableType": 'SpotImage',
+  "imageableId" : 3
+},
+{
+  "url": "https://southwickszoo.com/wp-content/uploads/IMG_4245-scaled.jpg",
+  "preview": false,
   "imageableType": 'SpotImage',
   "imageableId" : 3
 },
@@ -34,8 +99,56 @@ const data = [{
   "imageableId" : 4
 },
 {
+  "url": "https://southwickszoo.com/wp-content/uploads/IMG_4245-scaled.jpg",
+  "preview": false,
+  "imageableType": 'SpotImage',
+  "imageableId" : 4
+},
+{
+  "url": "https://southwickszoo.com/wp-content/uploads/IMG_4245-scaled.jpg",
+  "preview": false,
+  "imageableType": 'SpotImage',
+  "imageableId" : 4
+},
+{
+  "url": "https://southwickszoo.com/wp-content/uploads/IMG_4245-scaled.jpg",
+  "preview": false,
+  "imageableType": 'SpotImage',
+  "imageableId" : 4
+},
+{
+  "url": "https://southwickszoo.com/wp-content/uploads/IMG_4245-scaled.jpg",
+  "preview": false,
+  "imageableType": 'SpotImage',
+  "imageableId" : 4
+},
+{
   "url": "https://media.timeout.com/images/105777074/750/422/image.jpg",
   "preview": true,
+  "imageableType": 'SpotImage',
+  "imageableId" : 5
+},
+{
+  "url": "https://southwickszoo.com/wp-content/uploads/IMG_4245-scaled.jpg",
+  "preview": false,
+  "imageableType": 'SpotImage',
+  "imageableId" : 5
+},
+{
+  "url": "https://southwickszoo.com/wp-content/uploads/IMG_4245-scaled.jpg",
+  "preview": false,
+  "imageableType": 'SpotImage',
+  "imageableId" : 5
+},
+{
+  "url": "https://southwickszoo.com/wp-content/uploads/IMG_4245-scaled.jpg",
+  "preview": false,
+  "imageableType": 'SpotImage',
+  "imageableId" : 5
+},
+{
+  "url": "https://southwickszoo.com/wp-content/uploads/IMG_4245-scaled.jpg",
+  "preview": false,
   "imageableType": 'SpotImage',
   "imageableId" : 5
 },
@@ -44,7 +157,31 @@ const data = [{
   "preview": true,
   "imageableType": 'SpotImage',
   "imageableId" : 6
-}
+},
+{
+  "url": "https://southwickszoo.com/wp-content/uploads/IMG_4245-scaled.jpg",
+  "preview": false,
+  "imageableType": 'SpotImage',
+  "imageableId" : 6
+},
+{
+  "url": "https://southwickszoo.com/wp-content/uploads/IMG_4245-scaled.jpg",
+  "preview": false,
+  "imageableType": 'SpotImage',
+  "imageableId" : 6
+},
+{
+  "url": "https://southwickszoo.com/wp-content/uploads/IMG_4245-scaled.jpg",
+  "preview": false,
+  "imageableType": 'SpotImage',
+  "imageableId" : 6
+},
+{
+  "url": "https://southwickszoo.com/wp-content/uploads/IMG_4245-scaled.jpg",
+  "preview": false,
+  "imageableType": 'SpotImage',
+  "imageableId" : 6
+},
 ]
 let options = {};
 if (process.env.NODE_ENV === 'production') {
