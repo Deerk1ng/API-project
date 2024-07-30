@@ -24,33 +24,55 @@ const CreateSpot = () => {
     const navigate = useNavigate()
 
 
+    const validateData = () => {
+        const err ={}
+        if(name.length == 0) err["name"] = "Name is required"
+        if(address.length == 0) err["address"] = "Address is required"
+        if(city.length == 0) err["city"] = "City is required"
+        if(state.length == 0) err["state"] = "State is required"
+        if(country.length == 0) err["country"] = "Country is required"
+        if(description.length < 30) err["description"] = "Description needs a minimum of 30 characters"
+        if(price.length == 0) err["price"] = "Price is required"
+        if(previewImage.length == 0) err["previewImage"] = "Preview image is required"
+        if(!(previewImage.endsWith('.png') || previewImage.endsWith('.jpg') || previewImage.endsWith('.jpeg'))) err["previewImage"] = "Preview image URL must end in .png, .jpg, or .jpeg"
+        if(photo1.length > 0 && !(photo1.endsWith('.png') || photo1.endsWith('.jpg') || photo1.endsWith('.jpeg'))) err["photo1"] = "Image URL must end in .png, .jpg, or .jpeg"
+        if(photo2.length > 0 && !(photo2.endsWith('.png') || photo2.endsWith('.jpg') || photo2.endsWith('.jpeg'))) err["photo2"] = "Image URL must end in .png, .jpg, or .jpeg"
+        if(photo3.length > 0 && !(photo3.endsWith('.png') || photo3.endsWith('.jpg') || photo3.endsWith('.jpeg'))) err["photo3"] = "Image URL must end in .png, .jpg, or .jpeg"
+        if(photo4.length > 0 && !(photo4.endsWith('.png') || photo4.endsWith('.jpg') || photo4.endsWith('.jpeg'))) err["photo4"] = "Image URL must end in .png, .jpg, or .jpeg"
+        setErrors(err)
+        if(Object.values(err).length){
+            return false
+        } else return true
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setErrors({previewImage: 'Preview image is required'})
 
-        const photoArr = [photo1, photo2, photo3, photo4]
+        if(validateData()) {
+            const photoArr = [photo1, photo2, photo3, photo4]
 
-        const newSpot = {
-            address,
-            city,
-            state,
-            country,
-            lat: '50',
-            lng: '50',
-            name,
-            description,
-            price,
+            const newSpot = {
+                address,
+                city,
+                state,
+                country,
+                lat: '50',
+                lng: '50',
+                name,
+                description,
+                price,
+            }
+
+            dispatch(spotActions.createSingleSpot(newSpot))
+            .then(data => {
+                    dispatch(spotActions.uploadImage(data.id, {url: previewImage, preview: true}))
+                    photoArr.forEach(url => url? dispatch(spotActions.uploadImage(data.id, {url: url, preview: false})): url)
+                    navigate(`/spots/${data.id}`)
+            }).catch(async (err) => {
+                const newErrs = await err.json()
+                setErrors(...errors, ...newErrs.errors)
+            })
         }
-
-        dispatch(spotActions.createSingleSpot(newSpot))
-        .then(data => {
-                dispatch(spotActions.uploadImage(data.id, {url: previewImage, preview: true}))
-                photoArr.forEach(url => url? dispatch(spotActions.uploadImage(data.id, {url: url, preview: false})): url)
-                navigate(`/spots/${data.id}`)
-        }).catch(async (err) => {
-            const newErrs = await err.json()
-            setErrors(newErrs.errors)
-        })
     }
 
     return (
@@ -141,7 +163,7 @@ const CreateSpot = () => {
                     onChange={e => setName(e.target.value)}
                     placeholder='Name of your spot'
                 />
-                {errors.name ? <span className='err'>Name is required</span> : <></>}
+                {errors.name ? <span className='err'>{errors.name}</span> : <></>}
             </div>
             <div className='form-sec'>
                  <h2 className='subheading'>Sert a base price for your spot</h2>
@@ -180,7 +202,7 @@ const CreateSpot = () => {
                     onChange={e => setPhoto1(e.target.value)}
                     placeholder='Image URL'
                 />
-                {errors.image ? <span className='err'>{errors.image}</span> : <></>}
+                {errors.photo1 ? <span className='err'>{errors.photo1}</span> : <></>}
                 <input
                     className='input'
                     type="text"
@@ -188,7 +210,7 @@ const CreateSpot = () => {
                     onChange={e => setPhoto2(e.target.value)}
                     placeholder='Image URL'
                 />
-                {errors.image ? <span className='err'>{errors.image}</span> : <></>}
+                {errors.photo2 ? <span className='err'>{errors.photo2}</span> : <></>}
                 <input
                     className='input'
                     type="text"
@@ -196,7 +218,7 @@ const CreateSpot = () => {
                     onChange={e => setPhoto3(e.target.value)}
                     placeholder='Image URL'
                 />
-                {errors.image ? <span className='err'>{errors.image}</span> : <></>}
+                {errors.photo3 ? <span className='err'>{errors.photo3}</span> : <></>}
                 <input
                     className='input'
                     type="text"
@@ -204,7 +226,7 @@ const CreateSpot = () => {
                     onChange={e => setPhoto4(e.target.value)}
                     placeholder='Image URL'
                 />
-                {errors.image ? <span className='err'>{errors.image}</span> : <></>}
+                {errors.photo4 ? <span className='err'>{errors.photo4}</span> : <></>}
             </div>
                 <button type="submit">Create Spot</button>
 
