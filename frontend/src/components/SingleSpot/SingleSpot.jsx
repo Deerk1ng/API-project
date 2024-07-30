@@ -25,8 +25,10 @@ const SingleSpot = () => {
         const newImgArr = []
         for(let i = 0; i < 5; i++){
             const currImg = spotArr[i]
-            const imgClassName = `spot-img` + (currImg.preview ? ' preview' : ` photo${i}`)
-            newImgArr.push(<img key={currImg.id}  src={currImg.url} alt={`image belonging to the spot ${spot.name}`} className={imgClassName} />)
+            if(currImg){
+                const imgClassName = `spot-img` + (currImg.preview ? ' preview' : ` photo${i}`)
+                newImgArr.push(<img key={currImg.id}  src={currImg.url} alt={`image belonging to the spot ${spot.name}`} className={imgClassName} />)
+            } else newImgArr.push(<></>)
         }
         return newImgArr
     }
