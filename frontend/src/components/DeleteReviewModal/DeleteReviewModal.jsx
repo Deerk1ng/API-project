@@ -1,15 +1,18 @@
 import { useModal } from '../../context/Modal'
-import './DeleteSpotModal.css'
-import * as reviewActions from '../../store/reviews';
+import './DeleteReviewModal.css'
 import { useDispatch } from 'react-redux';
+import * as spotActions from '../../store/spot'
 
-function DeleteReviewModal({id}) {
+function DeleteReviewModal({prop}) {
+    const {spotId, id} = prop
   const { closeModal } = useModal();
   const dispatch = useDispatch();
 
     const handleDelete = () => {
-        dispatch(reviewActions.deleteReview(id))
+        console.log("prop ", spotId, id)
+        dispatch(spotActions.deleteReview(spotId, id))
         .then(closeModal)
+        .then(window.location.reload())
     }
 
     return (

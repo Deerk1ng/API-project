@@ -101,3 +101,10 @@
     background-color: #5985E1;
     color: #ffffff
 }
+
+.delete-rev {
+    margin-top: 5px;
+    background-color: #5985E1;
+    color: #ffffff;
+    padding: 5px 10px
+}

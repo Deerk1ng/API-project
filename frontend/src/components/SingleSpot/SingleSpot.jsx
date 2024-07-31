@@ -2,58 +2,36 @@ import { useParams } from 'react-router-dom'
 import './SingleSpot.css'
 import { useEffect, useState } from 'react';
 import { FaStar } from "react-icons/fa";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import OpenModalButton from '../OpenModalButton/OpenModalButton'
+import PostReviewModal from '../PostReviewModal/PostReviewModal';
+import DeleteReviewModal from '../DeleteReviewModal/DeleteReviewModal';
+import * as spotActions from '../../store/spot'
 
 
 const SingleSpot = () => {
     const { spotId } = useParams();
     const user = useSelector((state) => state.session.user)
+    const reviews = useSelector((state) => state.spots[spotId]?.reviews)
     const [spot, setSpot] = useState({})
-    const [reviews, setReviews] = useState([])
-    const [critics, setCritics] = useState([])
+    const [isLoaded, setIsLoaded] = useState(false)
+    const dispatch = useDispatch()
 
     useEffect(() =>  {
-        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
         const getSingleSpot = async () => {
             const response = await fetch(`/api/spots/${spotId}`)
 
             if(response.ok) {
                 const data = await response.json()
+                dispatch(spotActions.getReviews(spotId))
                 setSpot(data)
             }
         }
-        const getReviews = async () => {
-            const response = await fetch(`/api/spots/${spotId}/reviews`)
 
-            if(response.ok) {
-                const data = await response.json()
-                const arr = data.Reviews
-                const idLog = []
-                const reviewsArr = (arr.map(el => {
-                    const { review, User, createdAt } = el
-                    const firstName = User.firstName
-                    const userId = User.id
-                    const dateFormatted = new Date(createdAt)
-                    const date = months[dateFormatted.getMonth()] + " " + dateFormatted.getFullYear()
-                    idLog.push(userId)
-                    return {
-                        firstName,
-                        userId,
-                        date,
-                        review,
-                        dateFormatted
-                    }
-                }))
-                reviewsArr.sort((a, b) => a.dateFormatted - b.dateFormatted)
-                setReviews(reviewsArr)
-                setCritics(idLog)
-                console.log(reviewsArr, user.id)
-            }
-        }
-        getSingleSpot()
-        getReviews()
-    }, [spotId])
-
+        dispatch(spotActions.getAllSpots())
+        .then(getSingleSpot())
+        .then(setIsLoaded(true))
+    }, [dispatch, spotId])
 
     const imgLoop = (spotArr) => {
         const newImgArr = []
@@ -69,8 +47,15 @@ const SingleSpot = () => {
         return newImgArr
     }
 
+    const checkCritics = (reviews =[]) => {
+        const idLog = []
+        reviews.forEach(review => idLog.push(review.userId))
+        return idLog.includes(user.id)
+    }
+
     return (
-        <div className='spot-article'>
+        <>
+        {isLoaded ? <div className='spot-article'>
             <h1 className='spot-title'>{spot?.name}</h1>
             <div className='spot-location'>{spot?.city} , {spot?.state} , {spot?.country}</div>
             <div className='img-cont'>
@@ -93,16 +78,26 @@ const SingleSpot = () => {
 
             <div className='spot-reviews'>
                 <h2><FaStar /> {spot.avgStarRating > 0 ? spot.avgStarRating.toFixed(2) + ' · ': ''} {spot.numReviews > 0 ? spot.numReviews + (spot.numReviews > 1 ? ' reviews' : ' review') : 'New'}</h2>
-                { (user && user.id !== spot.id && !critics.includes(user.id)) ? <button>Post Your Review</button> : <></>}
-                {(!reviews.length && user) ? ( <div>Be the first to post a review!</div> ) : reviews.map(review => {
+                { (user && user.id !== spot.id && !checkCritics(reviews)) ?
+                    <OpenModalButton
+                    buttonText="Post Your Review"
+                    className='newSpot-button'
+                    modalComponent={<PostReviewModal id={spot.id}/>} />
+                    : <></>}
+                 {(!reviews?.length) ? ( user ? <div>Be the first to post a review!</div> : <></> ) : reviews.map(review => {
                    return ( <div key={review.firstName} className='review-container'>
                         <div className='review-name'>{review.firstName}</div>
                         <div className='review-month'>{review.date}</div>
-                        <div className='review-text'>{review.review}</div>
-                    </div>)
+                        <div className='spot-desc'>{review.review}</div>
+                        {user?.id == review.userId ? <OpenModalButton
+                            buttonText="Delete"
+                            className='delete-rev'
+                            modalComponent={<DeleteReviewModal prop={{spotId, id: review.id}}/>} /> : <></>}
+                            </div>)
                 }) }
             </div>
-        </div>
+        </div> : <></>}
+        </>
     )
 }
 
