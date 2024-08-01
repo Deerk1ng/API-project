@@ -175,7 +175,7 @@ const UpdateSpot = () => {
                     {errors.name ? <span className='err'>Name is required</span> : <></>}
                 </div>
                 <div className='form-sec'>
-                    <h2 className='subheading'>Sert a base price for your spot</h2>
+                    <h2 className='subheading'>Set a base price for your spot</h2>
                     <div className='desc-head'>Comnpetitive pricing can help your listing stand out and rank higher in search results</div>
                     <label>
                         <div className='price'>
@@ -191,7 +191,7 @@ const UpdateSpot = () => {
                             {errors.price ? <span className='err'>{errors.price}</span> : <></>}
                     </label>
                 </div>
-                <button type="submit">Update Spot</button>
+                <button type="submit" className='submit-button'>Update Your Spot</button>
 
             </form>
         </>

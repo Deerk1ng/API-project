@@ -20,7 +20,7 @@ const ManageSpots = () => {
         <>
             <div className='header-container'>
                 <h1>Manage Spots</h1>
-                <button className='curr-button' onClick={() => navigate('/spots/new')} >Create a New Spot</button>
+                {!spots.length ? <button className='curr-button' onClick={() => navigate('/spots/new')} >Create a New Spot</button> : <></> }
             </div>
             <div className='spots-container'>
                 {spots.map((spot) => <Spots key={spot.id} spots={spot} isCurrent={true}/>)}

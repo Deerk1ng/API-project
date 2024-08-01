@@ -228,7 +228,7 @@ const CreateSpot = () => {
                 />
                 {errors.photo4 ? <span className='err'>{errors.photo4}</span> : <></>}
             </div>
-                <button type="submit">Create Spot</button>
+                <button type="submit" className='submit-button'>Create Spot</button>
 
             </form>
         </>

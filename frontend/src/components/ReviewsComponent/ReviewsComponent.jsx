@@ -28,7 +28,7 @@ const ReviewsComponent = ({props}) => {
         <>
             {isLoaded ?
             <>
-                {(user && user.id !== spot && !checkCritics(reviews)) ?
+                {(user && user.id !== spot.ownerId && !checkCritics(reviews)) ?
                 <OpenModalButton
                 buttonText="Post Your Review"
                 className='newSpot-button'

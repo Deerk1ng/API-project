@@ -69,3 +69,10 @@ input {
 .desc {
     height: 150px;
 }
+
+.submit-button {
+    align-self: center;
+    margin-top: 10px;
+    background-color: #5985E1;
+    color: #ffffff;
+}
