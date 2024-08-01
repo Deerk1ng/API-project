@@ -23,6 +23,12 @@ const data = [{
     "review": "Nullam nibh purus, ultricies et est vel, ultricies aliquet purus. Suspendisse potenti. Donec rutrum et turpis eu maximus. Vivamus sollicitudin sodales leo, nec pellentesque nibh commodo eu. Sed malesuada sem ut dolor maximus laoreet. Nulla ligula risus, fringilla sed urna a, euismod finibus tortor. Nullam rutrum ac sapien in sollicitudin. Sed eget vulputate sapien. Aenean ipsum ante, suscipit pharetra risus ac, maximus hendrerit ligula.",
     "stars": 1,
     'createdAt': '2023-6-19 20:39:36'
+   },
+   {
+    "userId": 3,
+    "spotId": 1,
+    "review": "Duis facilisis blandit augue at lobortis. Morbi vel eros eu neque interdum condimentum. Vestibulum dapibus gravida efficitur. Nulla vitae ligula varius, tincidunt magna non, vulputate diam. Curabitur pellentesque bibendum erat non congue. Aliquam erat volutpat. Vestibulum congue turpis non tortor tincidunt vestibulum. Donec tincidunt justo eros, a lacinia odio malesuada quis. Proin vitae magna quis justo elementum faucibus nec ut urna.",
+    "stars": 5,
    }]
 
   let options = {};
