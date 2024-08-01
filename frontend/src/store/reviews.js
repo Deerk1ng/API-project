@@ -5,23 +5,26 @@ const ADD_REVIEW = 'reviews/createReview'
 const DELETE_REVIEW = 'reviews/deleteReview'
 
 //action creators
-const loadReviews = (reviews) => {
+const loadReviews = (spotId, reviews) => {
     return {
         type: GET_REVIEW,
+        spotId,
         reviews
     }
 }
 
-const addReview = (review) => {
+const addReview = (spotId,review) => {
     return {
         type: ADD_REVIEW,
+        spotId,
         review
     }
 }
 
-const removeReview = (id) => {
+const removeReview = (spotId,id) => {
     return {
         type: DELETE_REVIEW,
+        spotId,
         id
     }
 }
@@ -29,7 +32,7 @@ const removeReview = (id) => {
 
 
 
-export const getReview = (spotId) => async (dispatch) => {
+export const getReviews = (spotId) => async (dispatch) => {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     const response = await fetch(`/api/spots/${spotId}/reviews`)
     if(response.ok) {
@@ -50,15 +53,15 @@ export const getReview = (spotId) => async (dispatch) => {
                 dateFormatted
             }
         }))
-        reviewsArr.sort((a, b) => a.dateFormatted - b.dateFormatted)
-        dispatch(loadReviews(reviewsArr))
+        dispatch(loadReviews(spotId,reviewsArr))
         return reviewsArr
     }
 }
 
-export const postReview = (el) => async (dispatch) => {
-    const {id, review, stars} = el
-    const response = await csrfFetch(`/api/spots/${id}/reviews`, {
+export const postReview = (el, user) => async (dispatch) => {
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    const {spotId, review, stars} = el
+    const response = await csrfFetch(`/api/spots/${spotId}/reviews`, {
         method: 'POST',
         body: JSON.stringify({
             review,
@@ -68,21 +71,34 @@ export const postReview = (el) => async (dispatch) => {
 
     const data = await response.json();
     if(response.ok){
-        dispatch(addReview(data))
-        return data
+        const { review, createdAt, id } = data
+        const firstName = user.firstName
+        const userId = user.id
+        const dateFormatted = new Date(createdAt)
+        const date = months[dateFormatted.getMonth()] + " " + dateFormatted.getFullYear()
+        const newRev = {
+            id,
+            firstName,
+            userId,
+            date,
+            review,
+            dateFormatted
+        }
+        dispatch(addReview(spotId,newRev))
+        return newRev
     } else {
         return data.errors
     }
 
 }
 
-export const deleteReview = (id) => async (dispatch) => {
+export const deleteReview = (spotId, id) => async (dispatch) => {
     const response = await csrfFetch(`/api/reviews/${id}`, {
         method: 'DELETE'
     })
 
     if(response.ok){
-        dispatch(removeReview(id))
+        dispatch(removeReview(spotId, id))
         return response
     }
 }
@@ -92,13 +108,13 @@ const initialState = {}
 const reviewsReducer = (state = initialState, action) => {
     switch(action.type){
         case GET_REVIEW: {
-            const newState = {...state};
-            action.spots?.Spots.forEach((spot) => newState[spot.id] = spot);
+            const newState = {};
+            action.reviews.forEach((review) => newState[review.id] = review);
             return newState;
         }
         case ADD_REVIEW: {
             const newState = {...state}
-            newState[action.spot.id] = action.spot
+            newState[action.review.id] = action.review
             return newState
         }
         case DELETE_REVIEW: {

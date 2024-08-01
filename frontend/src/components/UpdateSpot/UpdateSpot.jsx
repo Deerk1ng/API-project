@@ -13,7 +13,6 @@ const UpdateSpot = () => {
     const [description, setDescription] = useState('')
     const [name, setName] = useState('')
     const [price, setPrice] = useState('')
-
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const { spotId } = useParams();
@@ -42,11 +41,27 @@ const UpdateSpot = () => {
         setPrice(spot.price)
     }, [spot])
 
+    const validateData = () => {
+        const err ={}
+        if(name.length == 0) err["name"] = "Name is required"
+        if(address.length == 0) err["address"] = "Address is required"
+        if(city.length == 0) err["city"] = "City is required"
+        if(state.length == 0) err["state"] = "State is required"
+        if(country.length == 0) err["country"] = "Country is required"
+        if(description.length < 30) err["description"] = "Description needs a minimum of 30 characters"
+        if(price.length == 0) err["price"] = "Price is required"
+        setErrors(err)
+        if(Object.values(err).length){
+            return false
+        } else return true
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault();
         setErrors({})
 
-        const newSpot = {
+        if(validateData()) {
+            const newSpot = {
             id: spotId,
             address,
             city,
@@ -66,7 +81,7 @@ const UpdateSpot = () => {
             const newErrs = await err.json()
             setErrors({ ...errors, ...newErrs.errors})
 
-        })
+        })}
     }
 
     return (

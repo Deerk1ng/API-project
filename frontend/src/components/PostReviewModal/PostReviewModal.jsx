@@ -1,33 +1,32 @@
 import './PostReviewModal.css'
 import { useModal } from '../../context/Modal';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import { FaStar } from 'react-icons/fa'
-import * as spotActions from '../../store/spot'
+import * as reviewsActions from '../../store/reviews'
 
 
 
-function PostReviewModal({id}) {
+function PostReviewModal({spotId}) {
   const [review, setReview] = useState('');
   const [stars, setStars] = useState(0)
   const [hover, setHover] = useState(null)
   const [errors, setErrors] = useState({})
   const dispatch = useDispatch();
   const { closeModal } = useModal();
-
+  const user = useSelector(state => state.session.user)
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
         const newReview = {
-            id,
+            spotId,
             review,
             stars
         }
 
-        return dispatch(spotActions.postReview(newReview))
+        return dispatch(reviewsActions.postReview(newReview, user))
         .then(closeModal)
-        .then(window.location.reload())
         .catch(async (res) => {
             const data = await res.json();
             if (data && data.errors) {
@@ -63,7 +62,7 @@ function PostReviewModal({id}) {
                                 />
                             </label>
                         )
-                    })}
+                    })}<div className='stars-text'> Stars</div>
                 </div>
                 <button className='review-button' disabled={(review.length < 10 || !stars) ? true : false} >Submit Your Review</button>
             </form>

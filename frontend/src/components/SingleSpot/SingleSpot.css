@@ -64,19 +64,18 @@
 }
 
 .disc-container {
-    width: 60%
+    width: 65%
 }
 
 .reserve-cont {
     display: flex;
     flex-direction: column;
     border: 1px solid #000000;
-    width: 30%;
+    width: 32%;
     margin-top: 20px;
     border-radius: 20px;
     height: 110px;
     justify-content: center;
-    /* padding: 10px */
 }
 
 .reserve-box {
@@ -107,4 +106,22 @@
     background-color: #5985E1;
     color: #ffffff;
     padding: 5px 10px
+}
+
+.review-container {
+    padding: 0px 10px;
+    margin: 20px 0px;
+}
+
+.review-name {
+    font-size: medium;
+    font-weight: bold;
+}
+
+.review-month {
+    color: #a0a0a0
+}
+
+.spot-desc {
+    padding: 10px 0px;
 }
