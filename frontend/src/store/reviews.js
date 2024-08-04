@@ -39,7 +39,7 @@ export const getReviews = (spotId) => async (dispatch) => {
         const data = await response.json()
         const arr = data.Reviews
         const reviewsArr = (arr.map(el => {
-            const { review, User, createdAt, id } = el
+            const { review, User, createdAt, id, stars } = el
             const firstName = User.firstName
             const userId = User.id
             const dateFormatted = new Date(createdAt)
@@ -50,7 +50,8 @@ export const getReviews = (spotId) => async (dispatch) => {
                 userId,
                 date,
                 review,
-                dateFormatted
+                dateFormatted,
+                stars,
             }
         }))
         dispatch(loadReviews(spotId,reviewsArr))
@@ -82,7 +83,8 @@ export const postReview = (el, user) => async (dispatch) => {
             userId,
             date,
             review,
-            dateFormatted
+            dateFormatted,
+            stars,
         }
         dispatch(addReview(spotId,newRev))
         return newRev

@@ -56,10 +56,11 @@
 }
 
 button:disabled {
-    background-color: #cccccc
+    background-color: #cccccc;
+    cursor: default;
 }
 
-.submit-button {
+.login-button {
     display: block;
     width: auto;
     background-color: #5985E1;

@@ -6,6 +6,10 @@
     margin-top: 10px;
 }
 
+.review-button:disabled {
+    cursor:default;
+}
+
 .review-title {
     margin-bottom: 10px;
 }

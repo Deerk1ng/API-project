@@ -55,7 +55,7 @@ function ProfileButton({ user }) {
       <ul className={ulClassName} ref={ulRef}>
         { user ? (
           <>
-            <li>Hello, {user.username}</li>
+            <li>Hello, {user.firstName}</li>
             <li>{user.email}</li>
             <li className='manage-spots' onClick={() => navigate('/spots/current')}>Manage Spots</li>
             <li>

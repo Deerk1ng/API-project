@@ -27,12 +27,13 @@ const CreateSpot = () => {
     const validateData = () => {
         const err ={}
         if(name.length == 0) err["name"] = "Name is required"
+        if(name.length > 100) err["name"] = "Name must be less than 150 characters"
         if(address.length == 0) err["address"] = "Address is required"
         if(city.length == 0) err["city"] = "City is required"
         if(state.length == 0) err["state"] = "State is required"
         if(country.length == 0) err["country"] = "Country is required"
         if(description.length < 30) err["description"] = "Description needs a minimum of 30 characters"
-        if(price.length == 0) err["price"] = "Price is required"
+        if(price > 0) err["price"] = "Price is required"
         if(previewImage.length == 0) err["previewImage"] = "Preview image is required"
         if(!(previewImage.endsWith('.png') || previewImage.endsWith('.jpg') || previewImage.endsWith('.jpeg'))) err["previewImage"] = "Preview image URL must end in .png, .jpg, or .jpeg"
         if(photo1.length > 0 && !(photo1.endsWith('.png') || photo1.endsWith('.jpg') || photo1.endsWith('.jpeg'))) err["photo1"] = "Image URL must end in .png, .jpg, or .jpeg"

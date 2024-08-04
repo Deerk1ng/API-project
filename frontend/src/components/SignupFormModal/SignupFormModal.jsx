@@ -108,7 +108,7 @@ function SignupFormModal() {
         {errors.confirmPassword && (
           <p className='error-login'>{errors.confirmPassword}</p>
         )}
-        <button className='submit-button' type="submit"
+        <button className='login-button' type="submit"
           disabled={
             username.length < 4 ||
             password.length < 6 ||

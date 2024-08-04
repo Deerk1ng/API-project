@@ -40,7 +40,7 @@ function PostReviewModal({spotId}) {
             <form className='review-form' onSubmit={handleSubmit}>
                 <h2 className='review-title'>How was your stay?</h2>
                 {errors.message ? <div className='err'>{errors.message}</div> : <></> }
-                <textarea className="review-text" placeholder='Just a quick review.' onChange={(e) => setReview(e.target.value)} />
+                <textarea className="review-text" placeholder='Leave your review here...' onChange={(e) => setReview(e.target.value)} />
                 <div className='star-container'>
                     {[...Array(5)].map((star , index) => {
                         const currentRate = index + 1
