@@ -33,7 +33,7 @@ const CreateSpot = () => {
         if(state.length == 0) err["state"] = "State is required"
         if(country.length == 0) err["country"] = "Country is required"
         if(description.length < 30) err["description"] = "Description needs a minimum of 30 characters"
-        if(price < 0) err["price"] = "Price is required"
+        if(price < 1) err["price"] = "Price is required"
         if(price > 10000) err["price"] = "Price must be less than $10,000"
         if(previewImage.length == 0) err["previewImage"] = "Preview image is required"
         if(!(previewImage.endsWith('.png') || previewImage.endsWith('.jpg') || previewImage.endsWith('.jpeg'))) err["previewImage"] = "Preview image URL must end in .png, .jpg, or .jpeg"

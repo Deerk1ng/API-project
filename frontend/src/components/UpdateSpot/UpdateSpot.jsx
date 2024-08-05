@@ -50,7 +50,7 @@ const UpdateSpot = () => {
         if(state.length == 0) err["state"] = "State is required"
         if(country.length == 0) err["country"] = "Country is required"
         if(description.length < 30) err["description"] = "Description needs a minimum of 30 characters"
-        if(price < 0) err["price"] = "Price is required"
+        if(price < 1) err["price"] = "Price is required"
         if(price > 10000) err["price"] = "Price must be less than $10,000"
         setErrors(err)
         if(Object.values(err).length){
