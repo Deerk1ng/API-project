@@ -32,7 +32,7 @@ const data = [{
 "updatedAt": "2021-11-19 20:39:36",
 },
 {
-  "ownerId": 3,
+  "ownerId": 2,
 "address": "333 test",
 "city": "Sacramento",
 "state": "California",
@@ -46,7 +46,7 @@ const data = [{
 "updatedAt": "2021-11-19 20:39:36",
 },
 {
-  "ownerId": 3,
+  "ownerId": 2,
   "address": "444 test",
   "city": "Los Angeles",
   "state": "California",
@@ -74,7 +74,7 @@ const data = [{
     "updatedAt": "2021-11-19 20:39:36",
     },
     {
-      "ownerId": 3,
+      "ownerId": 1,
       "address": "666 test",
       "city": "Burbank",
       "state": "California",

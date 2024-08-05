@@ -50,6 +50,8 @@ function SignupFormModal() {
         <input
           className='inputs'
             type="text"
+            minLength={1}
+            maxLength={30}
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
             placeholder='First Name'
@@ -59,6 +61,8 @@ function SignupFormModal() {
           <input
           className='inputs'
             type="text"
+            minLength={1}
+            maxLength={30}
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
             placeholder='Last Name'
@@ -68,6 +72,8 @@ function SignupFormModal() {
           <input
           className='inputs'
             type="text"
+            minLength={1}
+            maxLength={255}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder='Email'
@@ -79,6 +85,8 @@ function SignupFormModal() {
           <input
           className='inputs'
             type="text"
+            minLength={1}
+            maxLength={30}
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             placeholder='Username'

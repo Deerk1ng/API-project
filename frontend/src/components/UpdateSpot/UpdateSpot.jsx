@@ -44,12 +44,14 @@ const UpdateSpot = () => {
     const validateData = () => {
         const err ={}
         if(name.length == 0) err["name"] = "Name is required"
+        if(name.length > 150) err["name"] = "Name must be less than 150 characters"
         if(address.length == 0) err["address"] = "Address is required"
         if(city.length == 0) err["city"] = "City is required"
         if(state.length == 0) err["state"] = "State is required"
         if(country.length == 0) err["country"] = "Country is required"
         if(description.length < 30) err["description"] = "Description needs a minimum of 30 characters"
-        if(price.length == 0) err["price"] = "Price is required"
+        if(price < 0) err["price"] = "Price is required"
+        if(price > 10000) err["price"] = "Price must be less than $10,000"
         setErrors(err)
         if(Object.values(err).length){
             return false
@@ -99,6 +101,8 @@ const UpdateSpot = () => {
                         <input
                             className='input'
                             type="text"
+                            minLength={1}
+                            maxLength={30}
                             value={country}
                             placeholder="Country"
                             onChange={(e) => setCountry(e.target.value)}
@@ -112,6 +116,8 @@ const UpdateSpot = () => {
                         <input
                             className='input'
                             type="text"
+                            minLength={1}
+                            maxLength={30}
                             value={address}
                             placeholder="Street Address"
                             onChange={(e) => setAddress(e.target.value)}
@@ -127,6 +133,8 @@ const UpdateSpot = () => {
                                 <input
                                     className='city'
                                     type="text"
+                                    minLength={1}
+                                    maxLength={30}
                                     value={city}
                                     placeholder="City"
                                     onChange={(e) => setCity(e.target.value)}
@@ -142,6 +150,8 @@ const UpdateSpot = () => {
                             <input
                                 className='state'
                                 type="text"
+                                minLength={1}
+                                maxLength={30}
                                 placeholder="State"
                                 value={state}
                                 onChange={(e) => setState(e.target.value)}
@@ -168,6 +178,8 @@ const UpdateSpot = () => {
                     <input
                         className='input'
                         type="text"
+                        minLength={1}
+                        maxLength={50}
                         value={name}
                         onChange={e => setName(e.target.value)}
                         placeholder='Name of your spot'

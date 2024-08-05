@@ -27,13 +27,14 @@ const CreateSpot = () => {
     const validateData = () => {
         const err ={}
         if(name.length == 0) err["name"] = "Name is required"
-        if(name.length > 100) err["name"] = "Name must be less than 150 characters"
+        if(name.length > 150) err["name"] = "Name must be less than 150 characters"
         if(address.length == 0) err["address"] = "Address is required"
         if(city.length == 0) err["city"] = "City is required"
         if(state.length == 0) err["state"] = "State is required"
         if(country.length == 0) err["country"] = "Country is required"
         if(description.length < 30) err["description"] = "Description needs a minimum of 30 characters"
         if(price < 0) err["price"] = "Price is required"
+        if(price > 10000) err["price"] = "Price must be less than $10,000"
         if(previewImage.length == 0) err["previewImage"] = "Preview image is required"
         if(!(previewImage.endsWith('.png') || previewImage.endsWith('.jpg') || previewImage.endsWith('.jpeg'))) err["previewImage"] = "Preview image URL must end in .png, .jpg, or .jpeg"
         if(photo1.length > 0 && !(photo1.endsWith('.png') || photo1.endsWith('.jpg') || photo1.endsWith('.jpeg'))) err["photo1"] = "Image URL must end in .png, .jpg, or .jpeg"
@@ -91,6 +92,8 @@ const CreateSpot = () => {
                     <input
                         className='input'
                         type="text"
+                        minLength={1}
+                        maxLength={30}
                         value={country}
                         placeholder="Country"
                         onChange={(e) => setCountry(e.target.value)}
@@ -104,6 +107,8 @@ const CreateSpot = () => {
                     <input
                         className='input'
                         type="text"
+                        minLength={1}
+                        maxLength={30}
                         value={address}
                         placeholder="Street Address"
                         onChange={(e) => setAddress(e.target.value)}
@@ -119,6 +124,8 @@ const CreateSpot = () => {
                             <input
                                 className='city'
                                 type="text"
+                                minLength={1}
+                                maxLength={30}
                                 value={city}
                                 placeholder="City"
                                 onChange={(e) => setCity(e.target.value)}
@@ -134,6 +141,8 @@ const CreateSpot = () => {
                         <input
                             className='state'
                             type="text"
+                            minLength={1}
+                            maxLength={30}
                             placeholder="State"
                             value={state}
                             onChange={(e) => setState(e.target.value)}
@@ -160,6 +169,8 @@ const CreateSpot = () => {
                 <input
                     className='input'
                     type="text"
+                    minLength={1}
+                    maxLength={50}
                     value={name}
                     onChange={e => setName(e.target.value)}
                     placeholder='Name of your spot'
@@ -190,6 +201,8 @@ const CreateSpot = () => {
                 <input
                     className='input'
                     type="text"
+                    minLength={1}
+                    maxLength={255}
                     value={previewImage}
                     onChange={e => setPreviewImage(e.target.value)}
                     placeholder='Preview Image URL'
@@ -199,6 +212,8 @@ const CreateSpot = () => {
                 <input
                     className='input'
                     type="text"
+                    minLength={1}
+                    maxLength={255}
                     value={photo1}
                     onChange={e => setPhoto1(e.target.value)}
                     placeholder='Image URL'
@@ -207,6 +222,8 @@ const CreateSpot = () => {
                 <input
                     className='input'
                     type="text"
+                    minLength={1}
+                    maxLength={255}
                     value={photo2}
                     onChange={e => setPhoto2(e.target.value)}
                     placeholder='Image URL'
@@ -215,6 +232,8 @@ const CreateSpot = () => {
                 <input
                     className='input'
                     type="text"
+                    minLength={1}
+                    maxLength={255}
                     value={photo3}
                     onChange={e => setPhoto3(e.target.value)}
                     placeholder='Image URL'
@@ -223,6 +242,8 @@ const CreateSpot = () => {
                 <input
                     className='input'
                     type="text"
+                    minLength={1}
+                    maxLength={255}
                     value={photo4}
                     onChange={e => setPhoto4(e.target.value)}
                     placeholder='Image URL'

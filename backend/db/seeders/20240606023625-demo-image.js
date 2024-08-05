@@ -1,7 +1,7 @@
 'use strict';
 
 const data = [{
-  "url": "https://cdn.prod.website-files.com/660332e04a42ee42011d9a22/660332e04a42ee42011d9b86_Artboard%201%20copy-100.webp",
+  "url": "https://media.timeout.com/images/105777074/750/422/image.jpg",
   "preview": true,
   "imageableType": 'SpotImage',
   "imageableId" : 1
@@ -63,7 +63,7 @@ const data = [{
   "imageableId" : 2
 },
 {
-  "url": "https://media.timeout.com/images/105777074/750/422/image.jpg",
+  "url": "https://cdn.prod.website-files.com/660332e04a42ee42011d9a22/660332e04a42ee42011d9b86_Artboard%201%20copy-100.webp",
   "preview": true,
   "imageableType": 'SpotImage',
   "imageableId" : 3
