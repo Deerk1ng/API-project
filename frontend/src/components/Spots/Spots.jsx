@@ -16,7 +16,7 @@ const Spots = (spot) => {
             <img src={spot.previewImage} alt="preview of spot" className="prevImg"/>
             <div className='spot-preview'>
                 <div className="spot-addy">{spot.city},{spot.state}</div>
-                <div className="spot-rating"><FaStar /> {spot.avgRating > 0 ? spot.avgRating.toFixed(2) : 'New'}</div>
+                <div className="spot-rating"><FaStar /> {Number(spot.avgRating) > 0 ? Number(spot.avgRating).toFixed(2) : 'New'}</div>
             </div>
                 <div className="spot-price">${spot.price} night</div>
         </div>
